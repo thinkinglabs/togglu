@@ -9,7 +9,8 @@ import json
 import configparser as ConfigParser
 
 
-TOGGL_URL = "https://www.toggl.com/api/v8"
+TOGGL_URL = 'https://www.toggl.com/api/v8'
+REPORTS_URL = 'https://www.toggl.com/reports/api/v2/details'
 
 class Config(object):
     """
@@ -88,10 +89,11 @@ class CLI():
 
     def __init__(self, args=None):
         parser = argparse.ArgumentParser(prog='togglu.py', description='Toggl commandline tool')
-        parser.add_argument('--url', default=TOGGL_URL)
+        parser.add_argument('--toggl-url', default=TOGGL_URL)
+        parser.add_argument('--reports-url', default=REPORTS_URL)
         parser.add_argument('--workspaces', action='store_true', required=True)
         args = parser.parse_args(args)
-        self.toggl_url = args.url
+        self.toggl_url = args.toggl_url
 
     def execute(self):
         workspaces = Workspaces(self.toggl_url)

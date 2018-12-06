@@ -21,7 +21,7 @@ class TestCLI(unittest.TestCase):
             cli = togglu.CLI()
         except BaseException as err:
 
-            expected_output = 'usage: togglu.py [-h] [--url URL] --workspaces\ntogglu.py: error: the following arguments are required: --workspaces\n'
+            expected_output = 'usage: togglu.py [-h] [--toggl-url TOGGL_URL] [--reports-url REPORTS_URL]\n                 --workspaces\ntogglu.py: error: the following arguments are required: --workspaces\n'
             self.assertEqual(actual_output.getvalue(), expected_output)
 
             pass
@@ -43,13 +43,14 @@ class TestTogglU(unittest.TestCase):
                 imposter = mb.add_imposter_simple(path='/workspaces', response=data)
                 stub_url = 'http://localhost:{}'.format(imposter.port)
 
-                cli = togglu.CLI(['--url', stub_url, '--workspaces'])
+                cli = togglu.CLI(['--toggl-url', stub_url, '--workspaces'])
                 cli.execute()
 
                 expected_output = "1234567:workspace 1\n2345678:workspace 2\n3456789:workspace 3\n\n"
                 self.assertEqual(actual_output.getvalue(), expected_output)
         finally:
             sys.stdout = sys.__stdout__
+
 
 
 if __name__ == '__main__':
