@@ -1,0 +1,14 @@
+[
+    {
+        "id": 1234567,
+        "name": "workspace 1"
+    },
+    {
+        "id": 2345678,
+        "name": "workspace 2"
+    },
+    {
+        "id": 3456789,
+        "name": "workspace 3"
+    }
+]

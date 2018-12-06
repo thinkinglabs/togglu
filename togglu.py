@@ -2,9 +2,12 @@
 
 import sys
 import os
+import argparse
+
 import requests
 import json
 import configparser as ConfigParser
+
 
 TOGGL_URL = "https://www.toggl.com/api/v8"
 
@@ -53,8 +56,8 @@ class Config(object):
 
 class Workspaces:
 
-    def __init__(self):
-       result = toggl("/workspaces", "get")
+    def __init__(self, toggl_url = TOGGL_URL):
+       result = toggl(toggl_url, "/workspaces", "get")
        self.workspaces = json.loads(result)
 
     def __str__(self):
@@ -63,11 +66,11 @@ class Workspaces:
             result += "{}:{}\n".format(workspace['id'], workspace['name'])
         return result
 
-def toggl(url, method, data=None, headers={'content-type' : 'application/json'}):
+def toggl(base_url, request_uri, method, data=None, headers={'content-type' : 'application/json'}):
     """
     Makes an HTTP request to toggl.com. Returns the raw text data received.
     """
-    url = "{}{}".format(TOGGL_URL, url)
+    url = "{}{}".format(base_url, request_uri)
     try:
         if method == 'get':
             r = requests.get(url, auth=Config().get_auth(), data=data, headers=headers)
@@ -84,10 +87,13 @@ def toggl(url, method, data=None, headers={'content-type' : 'application/json'})
 class CLI():
 
     def __init__(self, args=None):
-        pass
+        parser = argparse.ArgumentParser(description="Toggl commandline tool")
+        parser.add_argument("--url", default=TOGGL_URL)
+        args = parser.parse_args(args)
+        self.toggl_url = args.url
 
     def execute(self):
-        workspaces = Workspaces()
+        workspaces = Workspaces(self.toggl_url)
         print(workspaces)
 
 if __name__ == '__main__':
