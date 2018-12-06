@@ -87,8 +87,9 @@ def toggl(base_url, request_uri, method, data=None, headers={'content-type' : 'a
 class CLI():
 
     def __init__(self, args=None):
-        parser = argparse.ArgumentParser(description="Toggl commandline tool")
-        parser.add_argument("--url", default=TOGGL_URL)
+        parser = argparse.ArgumentParser(prog='togglu.py', description='Toggl commandline tool')
+        parser.add_argument('--url', default=TOGGL_URL)
+        parser.add_argument('--workspaces', action='store_true', required=True)
         args = parser.parse_args(args)
         self.toggl_url = args.url
 
