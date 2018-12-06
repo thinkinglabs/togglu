@@ -9,11 +9,11 @@ import io
 import sys
 
 import argparse
-
+import port_for
 
 class TestCLI(unittest.TestCase):
 
-    def test_workspaces_required(self):
+    def test_required_arguments(self):
         actual_output = io.StringIO()
         sys.stderr = actual_output
 
@@ -21,7 +21,7 @@ class TestCLI(unittest.TestCase):
             cli = togglu.CLI()
         except BaseException as err:
 
-            expected_output = 'usage: togglu.py [-h] [--toggl-url TOGGL_URL] [--reports-url REPORTS_URL]\n                 --workspaces\ntogglu.py: error: the following arguments are required: --workspaces\n'
+            expected_output = 'usage: togglu.py [-h] [--toggl-url TOGGL_URL] [--reports-url REPORTS_URL]\n                 (--workspaces | --days-worked)\ntogglu.py: error: one of the arguments --workspaces --days-worked is required\n'
             self.assertEqual(actual_output.getvalue(), expected_output)
 
             pass
@@ -50,6 +50,9 @@ class TestTogglU(unittest.TestCase):
                 self.assertEqual(actual_output.getvalue(), expected_output)
         finally:
             sys.stdout = sys.__stdout__
+
+    
+
 
 
 

@@ -83,7 +83,7 @@ def toggl(base_url, request_uri, method, data=None, headers={'content-type' : 'a
         print('Sent: {}'.format(data))
         print(e)
         print(r.text)
-        #sys.exit(1)
+        sys.exit(1)
 
 class CLI():
 
@@ -91,7 +91,9 @@ class CLI():
         parser = argparse.ArgumentParser(prog='togglu.py', description='Toggl commandline tool')
         parser.add_argument('--toggl-url', default=TOGGL_URL)
         parser.add_argument('--reports-url', default=REPORTS_URL)
-        parser.add_argument('--workspaces', action='store_true', required=True)
+        group = parser.add_mutually_exclusive_group(required=True)
+        group.add_argument('--workspaces', action='store_true')
+        group.add_argument('--days-worked', action='store_true')
         args = parser.parse_args(args)
         self.toggl_url = args.toggl_url
 
