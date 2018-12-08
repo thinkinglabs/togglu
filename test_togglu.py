@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 
 import unittest
-import togglu
-
-import mountepy
-
+from unittest.mock import Mock
+from unittest.mock import patch
 import io
 import sys
 
-import argparse
+import togglu
+
+import mountepy
 import port_for
 
 class TestCLI(unittest.TestCase):
@@ -18,7 +18,7 @@ class TestCLI(unittest.TestCase):
         sys.stderr = actual_output
 
         try:
-            cli = togglu.CLI()
+            togglu.CLI()
         except BaseException as err:
 
             expected_output = 'usage: togglu.py [-h] [--toggl-url TOGGL_URL] [--reports-url REPORTS_URL]\n                 (--workspaces | --days-worked)\ntogglu.py: error: one of the arguments --workspaces --days-worked is required\n'
@@ -27,6 +27,48 @@ class TestCLI(unittest.TestCase):
             pass
         finally:
             sys.stdout = sys.__stderr__
+
+class TestDaysWorking(unittest.TestCase):
+
+    @patch('togglu.reports', side_effect=[
+            {
+                'total_count': 3,
+                'per_page': 1,
+                'data': [
+                    {'start': '2018-12-05T13:18:29+01:00'}
+                ]
+            },
+            {
+                'total_count': 3,
+                'per_page': 1,
+                'data': [
+                    {'start': '2018-12-05T08:55:26+01:00'}
+                ]
+            },
+            {
+                'total_count': 3,
+                'per_page': 1,
+                'data': [
+                    {'start': '2018-12-04T13:36:06+01:00'}
+                ]
+            }
+        ])
+    def test_calculate(self, reports):
+        actual_days_worked = togglu.DaysWorked.calculate()
+        self.assertEqual(actual_days_worked, 2)
+
+    def test_calculate_per_page(self):
+
+        time_entries = [
+            { 'start': '2018-12-06T14:57:18+01:00' },
+            { 'start': '2018-12-05T13:18:29+01:00' },
+            { 'start': '2018-12-05T08:55:26+01:00' },
+            { 'start': '2018-12-04T20:25:24+01:00' },
+            { 'start': '2018-12-04T20:09:09+01:00' },
+            { 'start': '2018-12-04T13:36:06+01:00' }
+        ]
+        (actual_days_worked, _) = togglu.DaysWorked.calculate_per_page(time_entries)
+        self.assertEqual(actual_days_worked, 3)
 
 
 class TestTogglU(unittest.TestCase):
@@ -51,7 +93,68 @@ class TestTogglU(unittest.TestCase):
         finally:
             sys.stdout = sys.__stdout__
 
-    
+    def test_daysworked(self):
+        try:
+            actual_output = io.StringIO()
+            sys.stdout = actual_output
+
+            with open('details_1.json', 'r') as myfile:
+                data1 = myfile.read().replace('\n', '')
+            with open('details_2.json', 'r') as myfile:
+                data2 = myfile.read().replace('\n', '')
+            with open('details_3.json', 'r') as myfile:
+                data3 = myfile.read().replace('\n', '')
+
+            with mountepy.Mountebank() as mb:
+                imposter = mb.add_imposter({
+                    'protocol': 'http',
+                    'port': port_for.select_random(),
+                    'stubs': [
+                        {
+                            'predicates': [
+                                {
+                                    'equals': {
+                                        'method': 'GET',
+                                        'path': '/details'
+                                    }
+                                }
+                            ],
+                            'responses': [
+                                {
+                                    'is': {
+                                        'statusCode': 200,
+                                        'headers': {'Content-Type': 'application/json'},
+                                        'body': data1
+                                    }
+                                },
+                                {
+                                    'is': {
+                                        'statusCode': 200,
+                                        'headers': {'Content-Type': 'application/json'},
+                                        'body': data2
+                                    }
+                                },
+                                {
+                                    'is': {
+                                        'statusCode': 200,
+                                        'headers': {'Content-Type': 'application/json'},
+                                        'body': data3
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                })
+
+                stub_url = 'http://localhost:{}'.format(imposter.port)
+
+                cli = togglu.CLI(['--reports-url', stub_url, '--days-worked'])
+                cli.execute()
+
+                expected_output = "4\n"
+                self.assertEqual(actual_output.getvalue(), expected_output)
+        finally:
+            sys.stdout = sys.__stdout__
 
 
 
