@@ -1,0 +1,87 @@
+{
+    "file": "data2",
+    "total_grand": 856345000,
+    "total_billable": null,
+    "total_currencies": [
+        {
+            "currency": null,
+            "amount": null
+        }
+    ],
+    "total_count": 8,
+    "per_page": 3,
+    "data": [
+        {
+            "id": 1035890357,
+            "pid": 147020673,
+            "tid": null,
+            "uid": 680811,
+            "description": "",
+            "start": "2018-11-23T20:00:18+01:00",
+            "end": "2018-11-23T21:03:59+01:00",
+            "updated": "2018-11-23T21:04:01+01:00",
+            "dur": 3821000,
+            "user": "Maddie Charpentier",
+            "use_stop": true,
+            "client": "VooFix",
+            "project": "Project NGH",
+            "project_color": "0",
+            "project_hex_color": "#ea468d",
+            "task": null,
+            "billable": null,
+            "is_billable": false,
+            "cur": null,
+            "tags": [
+                "billable"
+            ]
+        },
+        {
+            "id": 1035635776,
+            "pid": 147020673,
+            "tid": null,
+            "uid": 680811,
+            "description": "",
+            "start": "2018-11-23T13:53:15+01:00",
+            "end": "2018-11-23T17:39:31+01:00",
+            "updated": "2018-11-23T17:39:33+01:00",
+            "dur": 13576000,
+            "user": "Maddie Charpentier",
+            "use_stop": true,
+            "client": "VooFix",
+            "project": "Project NGH",
+            "project_color": "0",
+            "project_hex_color": "#ea468d",
+            "task": null,
+            "billable": null,
+            "is_billable": false,
+            "cur": null,
+            "tags": [
+                "billable"
+            ]
+        },
+        {
+            "id": 1035375959,
+            "pid": 147020673,
+            "tid": null,
+            "uid": 680811,
+            "description": "",
+            "start": "2018-11-23T08:56:20+01:00",
+            "end": "2018-11-23T12:39:00+01:00",
+            "updated": "2018-11-23T12:39:50+01:00",
+            "dur": 13360000,
+            "user": "Maddie Charpentier",
+            "use_stop": true,
+            "client": "VooFix",
+            "project": "Project NGH",
+            "project_color": "0",
+            "project_hex_color": "#ea468d",
+            "task": null,
+            "billable": null,
+            "is_billable": false,
+            "cur": null,
+            "tags": [
+                "billable"
+            ]
+        }
+    ]
+}

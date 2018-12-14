@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
 
 import unittest
-from unittest.mock import Mock
 from unittest.mock import patch
 import io
 import sys
+import os
 
-import togglu
+from .context import togglu
+from togglu import togglu
 
 import mountepy
 import port_for
+
+THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 class TestCLI(unittest.TestCase):
 
@@ -30,7 +33,7 @@ class TestCLI(unittest.TestCase):
 
 class TestDaysWorking(unittest.TestCase):
 
-    @patch('togglu.reports', side_effect=[
+    @patch('togglu.togglu.reports', side_effect=[
             {
                 'total_count': 3,
                 'per_page': 1,
@@ -78,7 +81,7 @@ class TestTogglU(unittest.TestCase):
             actual_output = io.StringIO()
             sys.stdout = actual_output
 
-            with open('workspaces.json', 'r') as myfile:
+            with open(os.path.join(THIS_DIR, os.pardir,'tests/workspaces.json'), 'r') as myfile:
                 data = myfile.read().replace('\n', '')
 
             with mountepy.Mountebank() as mb:
@@ -98,11 +101,11 @@ class TestTogglU(unittest.TestCase):
             actual_output = io.StringIO()
             sys.stdout = actual_output
 
-            with open('details_1.json', 'r') as myfile:
+            with open(os.path.join(THIS_DIR, os.pardir,'tests/days_worked1.json'), 'r') as myfile:
                 data1 = myfile.read().replace('\n', '')
-            with open('details_2.json', 'r') as myfile:
+            with open(os.path.join(THIS_DIR, os.pardir,'tests/days_worked2.json'), 'r') as myfile:
                 data2 = myfile.read().replace('\n', '')
-            with open('details_3.json', 'r') as myfile:
+            with open(os.path.join(THIS_DIR, os.pardir,'tests/days_worked3.json'), 'r') as myfile:
                 data3 = myfile.read().replace('\n', '')
 
             with mountepy.Mountebank() as mb:
@@ -158,7 +161,4 @@ class TestTogglU(unittest.TestCase):
 
 
 
-
-if __name__ == '__main__':
-    unittest.main()
 

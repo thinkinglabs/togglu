@@ -5,5 +5,5 @@ init:
 	pip install -r requirements.txt
 
 test:
-	./test_togglu.py
+	python -m unittest tests/test_togglu.py
 
