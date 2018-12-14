@@ -159,6 +159,5 @@ class TestTogglU(unittest.TestCase):
         finally:
             sys.stdout = sys.__stdout__
 
-
-
-
+if __name__ == '__main__':
+    unittest.main()
