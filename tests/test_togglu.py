@@ -6,11 +6,11 @@ import io
 import sys
 import os
 
-from .context import togglu
-from togglu import togglu
-
 import mountepy
 import port_for
+
+from .context import togglu
+from togglu import togglu
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
