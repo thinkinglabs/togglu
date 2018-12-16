@@ -23,14 +23,14 @@ class TimesheetDateEntryResponse:
     def __repr__(self):
         return "{" + str(self.date) + ", " + ','.join([str(item) for item in self.entries]) + "}"
 
-class TimesheetCustomerEntryResponse:
-    def __init__(self, customer_name, hours_worked):
-        self.customer_name = customer_name
-        self.hours_worked = hours_worked
+class TimesheetClientEntryResponse:
+    def __init__(self, client_name, duration):
+        self.client_name = client_name
+        self.duration = duration
 
     def __eq__(self, other):
-        return self.customer_name == other.customer_name and \
-               self.hours_worked == other.hours_worked
+        return self.client_name == other.client_name and \
+               self.duration == other.duration
 
     def __repr__(self):
-        return "{"+self.customer_name+":"+str(self.hours_worked)+"}"
+        return "{"+self.client_name + ":" + str(self.duration) + "}"
