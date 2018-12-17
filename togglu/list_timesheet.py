@@ -22,11 +22,11 @@ class ListTimesheet:
         return to_timesheet_response(timesheet)
 
 def to_timesheet_response(timesheet):
-    return TimesheetResponse(list(map(to_date_entry_response, timesheet.entries)))
+    return TimesheetResponse(list(map(to_date_entry_response, timesheet.entries.values())))
 
 def to_date_entry_response(timesheet_date_entry):
-        return TimesheetDateEntryResponse(timesheet_date_entry.date, list(map(to_customer_entry_response, timesheet_date_entry.entries)))
+        return TimesheetDateEntryResponse(timesheet_date_entry.date, list(map(to_customer_entry_response, timesheet_date_entry.entries.values())))
 
 def to_customer_entry_response(timesheet_customer_entry):
-        return TimesheetClientEntryResponse(timesheet_customer_entry.customer_name, timesheet_customer_entry.duration)
+        return TimesheetClientEntryResponse(timesheet_customer_entry.client_name, timesheet_customer_entry.duration)
 
