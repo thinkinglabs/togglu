@@ -70,6 +70,9 @@ class TimeEntries:
     def __eq__(self, other):
         self.entries == other.entries
 
+    def __iter__(self):
+        return iter(self.entries)
+
     def __repr__(self):
         return "TimeEntries(entries=%r)" % (self.entries)
 

@@ -40,7 +40,7 @@ class TimesheetDateEntryCase(unittest.TestCase):
         timesheet_date_entry = TimesheetDateEntry(date.fromisoformat('2018-11-11'), [TimesheetClientEntry('retromm', 5)])
         timesheet_date_entry.add('retromm', 4)
 
-        self.assertEqual(timesheet_date_entry, TimesheetDateEntry(date.fromisoformat('2018-11-11'), [TimesheetClientEntry('retromm', 10)]))
+        self.assertEqual(timesheet_date_entry, TimesheetDateEntry(date.fromisoformat('2018-11-11'), [TimesheetClientEntry('retromm', 9)]))
 
 if __name__ == '__main__':
     unittest.main()

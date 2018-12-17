@@ -1,6 +1,6 @@
 
 from togglu.detailed_report_service import DetailedReportService
-from togglu.timesheet_response import TimesheetResponse, TimesheetDateEntryResponse, TimesheetCustomerEntryResponse
+from togglu.timesheet_response import TimesheetResponse, TimesheetDateEntryResponse, TimesheetClientEntryResponse
 
 class TimesheetQuery:
     def __init__(self, api_token, workspace_id, since = None, until = None):
@@ -28,5 +28,5 @@ def to_date_entry_response(timesheet_date_entry):
         return TimesheetDateEntryResponse(timesheet_date_entry.date, list(map(to_customer_entry_response, timesheet_date_entry.entries)))
 
 def to_customer_entry_response(timesheet_customer_entry):
-        return TimesheetCustomerEntryResponse(timesheet_customer_entry.customer_name, timesheet_customer_entry.hours_worked)
+        return TimesheetClientEntryResponse(timesheet_customer_entry.customer_name, timesheet_customer_entry.duration)
 
