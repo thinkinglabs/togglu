@@ -1,7 +1,7 @@
 
 from togglu.timesheet import Timesheet
 
-class DetailedReportService:
+class TimesheetService:
 
     def __init__(self, detailed_report_repository):
         self.detailed_report_repository = detailed_report_repository

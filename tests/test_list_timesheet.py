@@ -11,7 +11,7 @@ from togglu.list_timesheet import TimesheetQuery
 from togglu.timesheet import Timesheet, TimesheetDateEntry, TimesheetClientEntry
 from togglu.timesheet_response import TimesheetResponse, TimesheetDateEntryResponse, TimesheetClientEntryResponse
 
-from togglu.detailed_report_service import DetailedReportService
+from togglu.timesheet_service import TimesheetService
 from togglu.list_timesheet import ListTimesheet
 
 class ListTimesheetTestCase(unittest.TestCase):

@@ -1,5 +1,5 @@
 
-from togglu.detailed_report_service import DetailedReportService
+from togglu.timesheet_service import TimesheetService
 from togglu.timesheet_response import TimesheetResponse, TimesheetDateEntryResponse, TimesheetClientEntryResponse
 
 class TimesheetQuery:

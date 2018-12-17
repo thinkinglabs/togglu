@@ -11,7 +11,7 @@ from togglu.list_timesheet import TimesheetQuery
 from togglu.timesheet import Timesheet, TimesheetDateEntry, TimesheetClientEntry, TimeEntries, TimeEntry
 from togglu.timesheet_response import TimesheetResponse, TimesheetDateEntryResponse, TimesheetClientEntryResponse
 
-from togglu.detailed_report_service import DetailedReportService
+from togglu.timesheet_service import TimesheetService
 from togglu.list_timesheet import ListTimesheet
 
 class DetailedReportServiceTestCase(unittest.TestCase):
@@ -30,7 +30,7 @@ class DetailedReportServiceTestCase(unittest.TestCase):
                 TimeEntry('calcile', '2018-12-04T08:47:14+01:00', 14743000)
             ])
 
-        sut = DetailedReportService(detailed_report_service)
+        sut = TimesheetService(detailed_report_service)
         actual = sut.timesheet('api_token', 'workspace_id')
 
         self.assertEqual(actual, Timesheet(
