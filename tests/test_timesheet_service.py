@@ -16,7 +16,7 @@ from togglu.list_timesheet import ListTimesheet
 
 class DetailedReportServiceTestCase(unittest.TestCase):
 
-    @patch('togglu.detailed_report_repository.DetailedReportRepository')
+    @patch('togglu.reports_repository.ReportsRepository')
     def test_timesheet(self, detailed_report_service):
 
         detailed_report_service.report.return_value = TimeEntries(
