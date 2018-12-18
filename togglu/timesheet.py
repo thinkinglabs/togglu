@@ -68,7 +68,9 @@ class TimeEntries:
         self.entries = entries
 
     def __eq__(self, other):
-        self.entries == other.entries
+        other is not None and \
+            other.__name__ == 'TimeEntries' and \
+            self.entries == other.entries
 
     def __iter__(self):
         return iter(self.entries)

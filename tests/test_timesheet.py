@@ -42,5 +42,14 @@ class TimesheetDateEntryCase(unittest.TestCase):
 
         self.assertEqual(timesheet_date_entry, TimesheetDateEntry(date.fromisoformat('2018-11-11'), [TimesheetClientEntry('retromm', 9)]))
 
+
+class TimeEntries(unittest.TestCase):
+
+    def test_time_entries_not_equal_to_none(self):
+        self.assertNotEquals(TimeEntries(), None)
+
+    def test_time_entries_not_equal_to_non_time_entries(self):
+        self.assertNotEquals(TimeEntries, object)
+
 if __name__ == '__main__':
     unittest.main()
