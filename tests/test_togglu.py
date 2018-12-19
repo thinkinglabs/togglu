@@ -24,7 +24,7 @@ class TestCLI(unittest.TestCase):
             togglu.CLI()
         except BaseException as err:
 
-            expected_output = 'usage: togglu.py [-h] [--toggl-url TOGGL_URL] [--reports-url REPORTS_URL]\n                 (--workspaces | --days-worked)\ntogglu.py: error: one of the arguments --workspaces --days-worked is required\n'
+            expected_output = 'usage: togglu.py [-h] [--toggl-url TOGGL_URL] [--reports-url REPORTS_URL]\n                 (--workspaces | --timesheet)\ntogglu.py: error: one of the arguments --workspaces --timesheet is required\n'
             self.assertEqual(actual_output.getvalue(), expected_output)
 
             pass
@@ -151,7 +151,7 @@ class TestTogglU(unittest.TestCase):
 
                 stub_url = 'http://localhost:{}'.format(imposter.port)
 
-                cli = togglu.CLI(['--reports-url', stub_url, '--days-worked'])
+                cli = togglu.CLI(['--reports-url', stub_url, '--timesheet'])
                 cli.execute()
 
                 expected_output = "4\n"

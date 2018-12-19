@@ -157,18 +157,18 @@ class CLI():
         parser.add_argument('--reports-url', default=REPORTS_URL)
         group = parser.add_mutually_exclusive_group(required=True)
         group.add_argument('--workspaces', action='store_true')
-        group.add_argument('--days-worked', action='store_true')
+        group.add_argument('--timesheet', action='store_true')
         args = parser.parse_args(args)
         self.toggl_url = args.toggl_url
         self.reports_url = args.reports_url
         self.workspaces = args.workspaces
-        self.days_worked = args.days_worked
+        self.timesheet = args.timesheet
 
     def execute(self):
         if self.workspaces:
             workspaces = Workspaces(self.toggl_url)
             print(workspaces)
-        elif self.days_worked:
+        elif self.timesheet:
             print(DaysWorked(self.reports_url))
 
 if __name__ == '__main__':
