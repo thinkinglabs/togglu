@@ -6,8 +6,8 @@ class TimesheetService:
     def __init__(self, detailed_report_repository):
         self.detailed_report_repository = detailed_report_repository
 
-    def timesheet(self, api_token, workspace_id, since = None, until = None):
-        time_entries = self.detailed_report_repository.report(api_token, workspace_id, since, until)
+    def timesheet(self, workspace_id, since = None, until = None):
+        time_entries = self.detailed_report_repository.report(workspace_id, since, until)
 
         timesheet = Timesheet()
 

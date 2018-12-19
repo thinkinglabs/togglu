@@ -101,11 +101,11 @@ class TestTogglU(unittest.TestCase):
             actual_output = io.StringIO()
             sys.stdout = actual_output
 
-            with open(os.path.join(THIS_DIR, os.pardir,'tests/days_worked1.json'), 'r') as myfile:
+            with open(os.path.join(THIS_DIR, os.pardir,'tests/detailed_report_page1.json'), 'r') as myfile:
                 data1 = myfile.read().replace('\n', '')
-            with open(os.path.join(THIS_DIR, os.pardir,'tests/days_worked2.json'), 'r') as myfile:
+            with open(os.path.join(THIS_DIR, os.pardir,'tests/detailed_report_page2.json'), 'r') as myfile:
                 data2 = myfile.read().replace('\n', '')
-            with open(os.path.join(THIS_DIR, os.pardir,'tests/days_worked3.json'), 'r') as myfile:
+            with open(os.path.join(THIS_DIR, os.pardir,'tests/detailed_report_page3.json'), 'r') as myfile:
                 data3 = myfile.read().replace('\n', '')
 
             with mountepy.Mountebank() as mb:

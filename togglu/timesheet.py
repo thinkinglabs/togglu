@@ -64,12 +64,15 @@ class TimesheetClientEntry:
 
 class TimeEntries:
 
-    def __init__(self, entries):
+    def __init__(self, entries=[]):
         self.entries = entries
 
+    def append(self, time_entry):
+        self.entries.append(time_entry)
+
     def __eq__(self, other):
-        other is not None and \
-            other.__name__ == 'TimeEntries' and \
+        return other is not None and \
+            other.__class__.__name__ == 'TimeEntries' and \
             self.entries == other.entries
 
     def __iter__(self):

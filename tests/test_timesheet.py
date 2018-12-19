@@ -7,7 +7,7 @@ from datetime import date
 
 from .context import togglu
 
-from togglu.timesheet import Timesheet, TimesheetDateEntry, TimesheetClientEntry, TimeEntry
+from togglu.timesheet import Timesheet, TimesheetDateEntry, TimesheetClientEntry, TimeEntries, TimeEntry
 
 class TimesheetTestCase(unittest.TestCase):
 
@@ -28,7 +28,7 @@ class TimesheetTestCase(unittest.TestCase):
                                    ])
             ]))
 
-class TimesheetDateEntryCase(unittest.TestCase):
+class TimesheetDateEntryTestCase(unittest.TestCase):
 
     def test_add_time_entry_to_empty_timesheet_date_entry(self):
         timesheet_date_entry = TimesheetDateEntry(date.fromisoformat('2018-11-11'))
@@ -43,13 +43,24 @@ class TimesheetDateEntryCase(unittest.TestCase):
         self.assertEqual(timesheet_date_entry, TimesheetDateEntry(date.fromisoformat('2018-11-11'), [TimesheetClientEntry('retromm', 9)]))
 
 
-class TimeEntries(unittest.TestCase):
+class TimeEntriesTestCase(unittest.TestCase):
 
     def test_time_entries_not_equal_to_none(self):
         self.assertNotEquals(TimeEntries(), None)
 
     def test_time_entries_not_equal_to_non_time_entries(self):
-        self.assertNotEquals(TimeEntries, object)
+        self.assertNotEquals(TimeEntries(), object)
+
+    def test_empty_time_entries_are_equal(self):
+        self.assertEqual(TimeEntries(), TimeEntries())
+
+    def test_time_entries_with_one_time_entry_each_having_the_same_fields_are_equal(self):
+        self.assertEqual(TimeEntries([TimeEntry("foo", "2018-12-01", 123)]), TimeEntries([TimeEntry("foo", "2018-12-01", 123)]))
+
+class TimeEntryTestCase(unittest.TestCase):
+
+    def test_time_entries_having_the_same_fields_are_equal(self):
+        self.assertEqual(TimeEntry("foo", "2018-12-01", 123), TimeEntry("foo", "2018-12-01", 123))
 
 if __name__ == '__main__':
     unittest.main()
