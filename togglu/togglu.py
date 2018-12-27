@@ -10,9 +10,7 @@ import requests
 import json
 import configparser as ConfigParser
 
-
-TOGGL_URL = 'https://www.toggl.com/api/v8'
-REPORTS_URL = 'https://www.toggl.com/reports/api/v2/details'
+from togglu.constants import TOGGL_URL, REPORTS_URL
 
 class Config(object):
     """
