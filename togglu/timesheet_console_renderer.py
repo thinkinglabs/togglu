@@ -11,5 +11,5 @@ class TimesheetConsoleRenderer():
         
         for date_entry in result.entries:
             for client_entry in date_entry.entries:
-                print("%s      %s      %d" % (date_entry.date, client_entry.client_name, client_entry.duration / 1000/60/60))
+                print(f'{date_entry.date.strftime("%x"):<10} | {client_entry.client_name:<30} | {client_entry.duration / 1000/60/60:10.2n}')
         
