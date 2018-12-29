@@ -26,6 +26,9 @@ class TestTimesheetConsoleRendererTest(unittest.TestCase):
                 TimesheetDateEntryResponse(date.fromisoformat("2018-12-27"), [
                     TimesheetClientEntryResponse("enicious", 2.5 * 1000*60*60),
                     TimesheetClientEntryResponse("frontile", 4 * 1000*60*60)
+                ]),
+                TimesheetDateEntryResponse(date.fromisoformat("2018-12-28"), [
+                    TimesheetClientEntryResponse("enicious", 1 * 1000*60*60)
                 ])
             ])
 
@@ -34,7 +37,8 @@ class TestTimesheetConsoleRendererTest(unittest.TestCase):
 
             expected_output = \
                 "27.12.2018 | enicious                       |        2.5\n" \
-                "27.12.2018 | frontile                       |        4.0\n"
+                "27.12.2018 | frontile                       |        4.0\n" \
+                "28.12.2018 | enicious                       |        1.0\n"
             
             self.assertEqual(actual_output.getvalue(), expected_output)
 
