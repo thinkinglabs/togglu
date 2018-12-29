@@ -31,7 +31,7 @@ class DetailedReportServiceTestCase(unittest.TestCase):
             ])
 
         sut = TimesheetService(detailed_report_service)
-        actual = sut.timesheet('api_token', 'workspace_id')
+        actual = sut.timesheet('workspace_id')
 
         self.assertEqual(actual, Timesheet(
             [

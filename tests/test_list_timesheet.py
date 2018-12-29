@@ -21,18 +21,18 @@ class ListTimesheetTestCase(unittest.TestCase):
 
         detailed_report_service.overview.return_value=Timesheet(
         [
-            TimesheetDateEntry(date.fromisoformat("2018-12-16"), [TimesheetClientEntry("sylent", 8.5)]),
-            TimesheetDateEntry(date.fromisoformat("2018-12-17"), [TimesheetClientEntry("euronoodle", 2.5), TimesheetClientEntry("sylent", 4)])
+            TimesheetDateEntry(date.fromisoformat('2018-12-16'), [TimesheetClientEntry('sylent', 8.5)]),
+            TimesheetDateEntry(date.fromisoformat('2018-12-17'), [TimesheetClientEntry('euronoodle', 2.5), TimesheetClientEntry('sylent', 4)])
         ])
 
         sut = ListTimesheet(detailed_report_service)
-        actual = sut.execute(TimesheetQuery("api_token", "workspace_id"))
+        actual = sut.execute(TimesheetQuery('workspace_id'))
 
         self.assertEqual(actual, TimesheetResponse(
             [
-                TimesheetDateEntryResponse(date.fromisoformat("2018-12-16"), [TimesheetClientEntryResponse("sylent", 8.5)]),
+                TimesheetDateEntryResponse(date.fromisoformat("2018-12-16"), [TimesheetClientEntryResponse('sylent', 8.5)]),
                 TimesheetDateEntryResponse(date.fromisoformat("2018-12-17"),
-                                           [TimesheetClientEntryResponse("euronoodle", 2.5), TimesheetClientEntryResponse("sylent", 4)])
+                                           [TimesheetClientEntryResponse('euronoodle', 2.5), TimesheetClientEntryResponse('sylent', 4)])
             ]))
 
 
