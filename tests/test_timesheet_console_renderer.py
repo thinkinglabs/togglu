@@ -33,7 +33,7 @@ class TestTimesheetConsoleRendererTest(unittest.TestCase):
             ])
 
             sut = TimesheetConsoleRenderer(list_timesheet)
-            sut.render()
+            sut.render(1234)
 
             expected_output = \
                 "27.12.2018 | enicious                       |        2.5\n" \

@@ -1,13 +1,14 @@
 
+from togglu.list_timesheet import TimesheetQuery
 
 class TimesheetConsoleRenderer():
 
     def __init__(self, list_timesheet):
         self.list_timesheet = list_timesheet
     
-    def render(self):
+    def render(self, workspace_id, since=None, until=None):
 
-        result = self.list_timesheet.execute()
+        result = self.list_timesheet.execute(TimesheetQuery(workspace_id, since, until))
         
         for date_entry in result.entries:
             for client_entry in date_entry.entries:
