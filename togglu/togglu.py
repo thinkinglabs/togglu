@@ -11,6 +11,10 @@ import json
 import configparser as ConfigParser
 
 from togglu.constants import TOGGL_URL, REPORTS_URL
+from togglu.timesheet_console_renderer import TimesheetConsoleRenderer
+from togglu.list_timesheet import ListTimesheet
+from togglu.timesheet_service import TimesheetService
+from togglu.reports_repository import ReportsRepository
 
 class Config(object):
     """
@@ -157,8 +161,9 @@ class CLI():
         subparsers = self.parser.add_subparsers(title='available subcommands', dest='subcommand', required=True)
         parser_workspaces = subparsers.add_parser('workspaces')
         parser_workspaces.set_defaults(func=self.workspaces)
-        parser_timesheet = subparsers.add_parser('daysworked')
-        parser_timesheet.set_defaults(func=self.daysworked)
+        parser_timesheet = subparsers.add_parser('timesheet')
+        parser_timesheet.set_defaults(func=self.timesheet)
+        parser_timesheet.add_argument('--workspace-id', required=True)
     
     def execute(self):
         args = self.parser.parse_args(self.arguments)
@@ -168,11 +173,11 @@ class CLI():
         workspaces = Workspaces(args.toggl_url)
         print(workspaces)
     
-    def daysworked(self, args):
-        print(DaysWorked(args.reports_url))
+    def timesheet(self, args):
+        renderer = TimesheetConsoleRenderer(ListTimesheet(TimesheetService(ReportsRepository(args.reports_url, Config()))))
+        renderer.render(args.workspace_id, args.since if hasattr(args, 'since') else None, args.until if hasattr(args, 'until') else None)
 
 
 if __name__ == '__main__':
-    print('__main__')
     cli = CLI(sys.argv[1:])
     cli.execute()

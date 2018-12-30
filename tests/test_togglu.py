@@ -16,7 +16,7 @@ THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 class TestCLI(unittest.TestCase):
 
-    def test_required_arguments(self):
+    def test_required_subcommand(self):
         actual_output = io.StringIO()
         sys.stderr = actual_output
 
@@ -27,9 +27,27 @@ class TestCLI(unittest.TestCase):
         except SystemExit:
             expected_output = \
                 "usage: togglu.py [-h] [--toggl-url TOGGL_URL] [--reports-url REPORTS_URL]\n" \
-                "                 {workspaces,daysworked} ...\n" \
+                "                 {workspaces,timesheet} ...\n" \
                 "togglu.py: error: the following arguments are required: subcommand\n"
 
+            self.assertEqual(actual_output.getvalue(), expected_output)
+
+        finally:
+            sys.stderr = sys.__stderr__
+
+    def test_required_arguments_for_timesheet(self):
+        actual_output = io.StringIO()
+        sys.stderr = actual_output
+
+        try:
+            cli = togglu.CLI(['timesheet'])
+            cli.execute()
+
+        except SystemExit:
+            expected_output = \
+                'usage: togglu.py timesheet [-h] --workspace-id WORKSPACE_ID\n' \
+                'togglu.py timesheet: error: the following arguments are required: --workspace-id\n'
+                
             self.assertEqual(actual_output.getvalue(), expected_output)
 
         finally:
@@ -155,7 +173,7 @@ class TestTogglU(unittest.TestCase):
 
                 stub_url = 'http://localhost:{}'.format(imposter.port)
 
-                cli = togglu.CLI(['--reports-url', stub_url, 'daysworked'])
+                cli = togglu.CLI(['--reports-url', stub_url, 'timesheet', '--workspace-id 123'])
                 cli.execute()
 
                 expected_output = "4\n"
