@@ -19,7 +19,7 @@ class DetailedReportServiceTestCase(unittest.TestCase):
     @patch('togglu.reports_repository.ReportsRepository')
     def test_timesheet(self, detailed_report_service):
 
-        detailed_report_service.report.return_value = TimeEntries(
+        detailed_report_service.detailed_report.return_value = TimeEntries(
             [
                 TimeEntry('anore', '2018-12-06T14:57:18+01:00', 6850000),
                 TimeEntry('calcile', '2018-12-05T13:18:29+01:00', 17932000),

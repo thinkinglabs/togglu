@@ -7,7 +7,7 @@ class TimesheetService:
         self.detailed_report_repository = detailed_report_repository
 
     def timesheet(self, workspace_id, since = None, until = None):
-        time_entries = self.detailed_report_repository.report(workspace_id, since, until)
+        time_entries = self.detailed_report_repository.detailed_report(workspace_id, since, until)
 
         timesheet = Timesheet()
 
