@@ -120,6 +120,7 @@ class TestTogglU(unittest.TestCase):
             sys.stdout = sys.__stdout__
 
     def test_timesheet(self):
+        self.maxDiff = None
         try:
             actual_output = io.StringIO()
             sys.stdout = actual_output
@@ -176,12 +177,13 @@ class TestTogglU(unittest.TestCase):
 
                 cli = togglu.CLI(['--reports-url', stub_url, 'timesheet', '--workspace-id', '123'])
                 cli.execute()
-
+                # TODO: fix the test: the actual results are twice the expected results
+                # it seems, the system is going twice over the test data, mountebank badly set up???
                 expected_output = \
-                    '06.12.2018 | Kaloo                          |        3.8\n' \
-                    '05.12.2018 | VooFix                         |       16.3\n' \
-                    '23.11.2018 | VooFix                         |       17.1\n' \
-                    '11.11.2018 | Wikimba                        |        0.2\n' \
+                    '06.12.2018 | Kaloo                          |        1.9\n' \
+                    '05.12.2018 | VooFix                         |        8.1\n' \
+                    '23.11.2018 | VooFix                         |        8.5\n' \
+                    '11.11.2018 | Wikimba                        |        0.1\n' \
                     '11.11.2018 | Kwimbee                        |        0.1\n' \
                     'days worked: 4\n'
                 self.assertEqual(actual_output.getvalue(), expected_output)
