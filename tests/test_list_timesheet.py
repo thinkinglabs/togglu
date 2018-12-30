@@ -34,7 +34,7 @@ class ListTimesheetTestCase(unittest.TestCase):
                 TimesheetDateEntryResponse(date.fromisoformat("2018-12-17"),
                                            [TimesheetClientEntryResponse('euronoodle', 2.5), TimesheetClientEntryResponse('sylent', 4)])
             ]))
-
+        self.assertEqual(actual.get_days_worked(), 2, 'number of days worked should be 2')
 
 if __name__ == '__main__':
     unittest.main()

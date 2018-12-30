@@ -2,7 +2,11 @@
 
 class TimesheetResponse:
     def __init__(self, entries=[]):
+        self.days_worked = 0
         self.entries = entries
+    
+    def get_days_worked(self):
+        return len(self.entries)
 
     def __eq__(self, other) -> bool:
         return self.entries == other.entries
