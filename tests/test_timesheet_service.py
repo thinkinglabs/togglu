@@ -21,13 +21,13 @@ class DetailedReportServiceTestCase(unittest.TestCase):
 
         detailed_report_service.detailed_report.return_value = TimeEntries(
             [
-                TimeEntry('anore', '2018-12-06T14:57:18+01:00', 6850000),
-                TimeEntry('calcile', '2018-12-05T13:18:29+01:00', 17932000),
-                TimeEntry('calcile', '2018-12-05T08:55:26+01:00', 11361000),
-                TimeEntry('anore', '2018-12-04T20:25:24+01:00', 1014000),
-                TimeEntry('lunent', '2018-12-04T20:09:09+01:00', 542000),
-                TimeEntry('calcile', '2018-12-04T13:36:06+01:00', 12713000),
-                TimeEntry('calcile', '2018-12-04T08:47:14+01:00', 14743000)
+                TimeEntry('anore', '2018-12-06T14:57:18+01:00', 5),
+                TimeEntry('calcile', '2018-12-05T13:18:29+01:00', 1),
+                TimeEntry('calcile', '2018-12-05T08:55:26+01:00', 2),
+                TimeEntry('anore', '2018-12-04T20:25:24+01:00', 6),
+                TimeEntry('lunent', '2018-12-04T20:09:09+01:00', 7),
+                TimeEntry('calcile', '2018-12-04T13:36:06+01:00', 3),
+                TimeEntry('calcile', '2018-12-04T08:47:14+01:00', 6)
             ])
 
         sut = TimesheetService(detailed_report_service)
@@ -36,15 +36,15 @@ class DetailedReportServiceTestCase(unittest.TestCase):
         self.assertEqual(actual, Timesheet(
             [
                 TimesheetDateEntry(date.fromisoformat('2018-12-06'), [
-                    TimesheetClientEntry('anore', 6850000)
+                    TimesheetClientEntry('anore', 5)
                 ]),
                 TimesheetDateEntry(date.fromisoformat('2018-12-05'), [
-                    TimesheetClientEntry('calcile', 29293000)
+                    TimesheetClientEntry('calcile', 3)
                 ]),
                 TimesheetDateEntry(date.fromisoformat('2018-12-04'), [
-                    TimesheetClientEntry('anore', 1014000),
-                    TimesheetClientEntry('lunent', 542000),
-                    TimesheetClientEntry('calcile', 27456000)
+                    TimesheetClientEntry('anore', 6),
+                    TimesheetClientEntry('lunent', 7),
+                    TimesheetClientEntry('calcile', 9)
                 ])
             ]))
 
