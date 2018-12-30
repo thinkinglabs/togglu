@@ -3,6 +3,7 @@
 import unittest
 from unittest.mock import patch
 import io
+import locale
 import sys
 import os
 
@@ -121,7 +122,10 @@ class TestTogglU(unittest.TestCase):
 
     def test_timesheet(self):
         self.maxDiff = None
+        default_time_locale = locale.getlocale(locale.LC_TIME)[0]
+
         try:
+            locale.setlocale(locale.LC_TIME, 'fr_BE')
             actual_output = io.StringIO()
             sys.stdout = actual_output
 
@@ -142,7 +146,8 @@ class TestTogglU(unittest.TestCase):
                                 {
                                     'equals': {
                                         'method': 'GET',
-                                        'path': '/details'
+                                        'path': '/details',
+                                        'query': { 'page': '1'}
                                     }
                                 }
                             ],
@@ -153,14 +158,40 @@ class TestTogglU(unittest.TestCase):
                                         'headers': {'Content-Type': 'application/json'},
                                         'body': data1
                                     }
-                                },
+                                }
+                            ]
+                        },
+                        {
+                            'predicates': [
+                                {
+                                    'equals': {
+                                            'method': 'GET',
+                                            'path': '/details',
+                                            'query': { 'page': '2'}
+                                    }
+                                }
+                            ],
+                            'responses': [
                                 {
                                     'is': {
                                         'statusCode': 200,
                                         'headers': {'Content-Type': 'application/json'},
                                         'body': data2
                                     }
-                                },
+                                }
+                            ]
+                        },
+                        {
+                            'predicates': [
+                                {
+                                    'equals': {
+                                        'method': 'GET',
+                                        'path': '/details',
+                                            'query': { 'page': '3'}
+                                    }
+                                }
+                            ],
+                            'responses': [
                                 {
                                     'is': {
                                         'statusCode': 200,
@@ -177,18 +208,18 @@ class TestTogglU(unittest.TestCase):
 
                 cli = togglu.CLI(['--reports-url', stub_url, 'timesheet', '--workspace-id', '123'])
                 cli.execute()
-                # TODO: fix the test: the actual results are twice the expected results
-                # it seems, the system is going twice over the test data, mountebank badly set up???
+                
                 expected_output = \
                     '06.12.2018 | Kaloo                          |        1.9\n' \
                     '05.12.2018 | VooFix                         |        8.1\n' \
                     '23.11.2018 | VooFix                         |        8.5\n' \
                     '11.11.2018 | Wikimba                        |        0.1\n' \
-                    '11.11.2018 | Kwimbee                        |        0.1\n' \
+                    '11.11.2018 | Kwimbee                        |        0.0\n' \
                     'days worked: 4\n'
                 self.assertEqual(actual_output.getvalue(), expected_output)
         finally:
             sys.stdout = sys.__stdout__
+            locale.setlocale(locale.LC_TIME, default_time_locale)
 
 if __name__ == '__main__':
     unittest.main()

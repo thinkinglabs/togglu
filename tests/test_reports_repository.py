@@ -42,7 +42,8 @@ class ReportsRepositoryTestCase(unittest.TestCase):
                             {
                                 'equals': {
                                     'method': 'GET',
-                                    'path': '/details'
+                                    'path': '/details',
+                                    'query': { 'page': '1'}
                                 }
                             }
                         ],
@@ -53,14 +54,40 @@ class ReportsRepositoryTestCase(unittest.TestCase):
                                     'headers': {'Content-Type': 'application/json'},
                                     'body': data1
                                 }
-                            },
+                            }
+                        ]
+                    },
+                    {
+                        'predicates': [
+                            {
+                                'equals': {
+                                        'method': 'GET',
+                                        'path': '/details',
+                                        'query': { 'page': '2'}
+                                }
+                            }
+                        ],
+                        'responses': [
                             {
                                 'is': {
                                     'statusCode': 200,
                                     'headers': {'Content-Type': 'application/json'},
                                     'body': data2
                                 }
-                            },
+                            }
+                        ]
+                    },
+                    {
+                        'predicates': [
+                            {
+                                'equals': {
+                                    'method': 'GET',
+                                    'path': '/details',
+                                        'query': { 'page': '3'}
+                                }
+                            }
+                        ],
+                        'responses': [
                             {
                                 'is': {
                                     'statusCode': 200,

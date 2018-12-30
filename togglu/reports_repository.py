@@ -18,18 +18,18 @@ class ReportsRepository:
 
         time_entries = TimeEntries()
 
-        detailed_report = self._reports(self.base_url, "details", "get", params)
-
-        number_of_pages = math.ceil(detailed_report['total_count'] / detailed_report['per_page'])
-
-        for entry in detailed_report['data']:
-            time_entries.append(to_time_entry(entry))
-
-        for page in range(2, number_of_pages + 1):
+        number_of_pages = 1
+        page = 1
+        while 1 <= page <= number_of_pages:
             params['page'] = page
             detailed_report = self._reports(self.base_url, "details", "get", params)
+
+            number_of_pages = math.ceil(detailed_report['total_count'] / detailed_report['per_page'])
+
             for entry in detailed_report['data']:
                 time_entries.append(to_time_entry(entry))
+
+            page += 1
 
         return time_entries
 
@@ -43,15 +43,16 @@ class ReportsRepository:
         auth = self.config.get_auth() if self.config else None
         try:
             if method == 'get':
-                r = requests.get(url, auth=auth, params=params, data=data, headers=headers)
+                response = requests.get(url, auth=auth, params=params, data=data, headers=headers)
             else:
                 raise NotImplementedError('HTTP method "{}" not implemented.'.format(method))
-            r.raise_for_status()  # raise exception on error
-            return json.loads(r.text)
+            response.raise_for_status()  # raise exception on error
+            result = json.loads(response.text)
+            return result
         except Exception as e:
             print('Sent: {}'.format(data))
             print(e)
-            print(r.text)
+            print(response.text)
             sys.exit(1)
 
 def to_time_entry(detailed_report_entry):
