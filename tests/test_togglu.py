@@ -45,7 +45,8 @@ class TestCLI(unittest.TestCase):
 
         except SystemExit:
             expected_output = \
-                'usage: togglu.py timesheet [-h] --workspace-id WORKSPACE_ID\n' \
+                'usage: togglu.py timesheet [-h] --workspace-id WORKSPACE_ID [--since SINCE]\n' \
+                '                           [--until UNTIL]\n' \
                 'togglu.py timesheet: error: the following arguments are required: --workspace-id\n'
                 
             self.assertEqual(actual_output.getvalue(), expected_output)
@@ -118,7 +119,7 @@ class TestTogglU(unittest.TestCase):
         finally:
             sys.stdout = sys.__stdout__
 
-    def test_daysworked(self):
+    def test_timesheet(self):
         try:
             actual_output = io.StringIO()
             sys.stdout = actual_output
@@ -173,10 +174,15 @@ class TestTogglU(unittest.TestCase):
 
                 stub_url = 'http://localhost:{}'.format(imposter.port)
 
-                cli = togglu.CLI(['--reports-url', stub_url, 'timesheet', '--workspace-id 123'])
+                cli = togglu.CLI(['--reports-url', stub_url, 'timesheet', '--workspace-id', '123'])
                 cli.execute()
 
-                expected_output = "4\n"
+                expected_output = \
+                    '06.12.2018 | Kaloo                          |        3.8\n' \
+                    '05.12.2018 | VooFix                         |       16.3\n' \
+                    '23.11.2018 | VooFix                         |       17.1\n' \
+                    '11.11.2018 | Wikimba                        |        0.2\n' \
+                    '11.11.2018 | Kwimbee                        |        0.1\n'
                 self.assertEqual(actual_output.getvalue(), expected_output)
         finally:
             sys.stdout = sys.__stdout__
