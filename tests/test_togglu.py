@@ -21,15 +21,19 @@ class TestCLI(unittest.TestCase):
         sys.stderr = actual_output
 
         try:
-            togglu.CLI()
-        except BaseException as err:
+            cli = togglu.CLI()
+            cli.execute()
 
-            expected_output = 'usage: togglu.py [-h] [--toggl-url TOGGL_URL] [--reports-url REPORTS_URL]\n                 (--workspaces | --timesheet)\ntogglu.py: error: one of the arguments --workspaces --timesheet is required\n'
+        except SystemExit:
+            expected_output = \
+                "usage: togglu.py [-h] [--toggl-url TOGGL_URL] [--reports-url REPORTS_URL]\n" \
+                "                 {workspaces,daysworked} ...\n" \
+                "togglu.py: error: the following arguments are required: subcommand\n"
+
             self.assertEqual(actual_output.getvalue(), expected_output)
 
-            pass
         finally:
-            sys.stdout = sys.__stderr__
+            sys.stderr = sys.__stderr__
 
 class TestDaysWorking(unittest.TestCase):
 
@@ -88,7 +92,7 @@ class TestTogglU(unittest.TestCase):
                 imposter = mb.add_imposter_simple(path='/workspaces', response=data)
                 stub_url = 'http://localhost:{}'.format(imposter.port)
 
-                cli = togglu.CLI(['--toggl-url', stub_url, '--workspaces'])
+                cli = togglu.CLI(['--toggl-url', stub_url, 'workspaces'])
                 cli.execute()
 
                 expected_output = "1234567:workspace 1\n2345678:workspace 2\n3456789:workspace 3\n\n"
@@ -151,7 +155,7 @@ class TestTogglU(unittest.TestCase):
 
                 stub_url = 'http://localhost:{}'.format(imposter.port)
 
-                cli = togglu.CLI(['--reports-url', stub_url, '--timesheet'])
+                cli = togglu.CLI(['--reports-url', stub_url, 'daysworked'])
                 cli.execute()
 
                 expected_output = "4\n"

@@ -149,25 +149,30 @@ def reports(base_url, request_uri, method, params=None, data=None, headers={'con
 
 class CLI():
 
-    def __init__(self, args=None):
-        parser = argparse.ArgumentParser(prog='togglu.py', description='Toggl commandline tool')
-        parser.add_argument('--toggl-url', default=TOGGL_URL)
-        parser.add_argument('--reports-url', default=REPORTS_URL)
-        group = parser.add_mutually_exclusive_group(required=True)
-        group.add_argument('--workspaces', action='store_true')
-        group.add_argument('--timesheet', action='store_true')
-        args = parser.parse_args(args)
-        self.toggl_url = args.toggl_url
-        self.reports_url = args.reports_url
-        self.workspaces = args.workspaces
-        self.timesheet = args.timesheet
-
+    def __init__(self, args=[]):
+        self.arguments = args
+        self.parser = argparse.ArgumentParser(prog='togglu.py', description='Toggl commandline tool')
+        self.parser.add_argument('--toggl-url', default=TOGGL_URL)
+        self.parser.add_argument('--reports-url', default=REPORTS_URL)
+        subparsers = self.parser.add_subparsers(title='available subcommands', dest='subcommand', required=True)
+        parser_workspaces = subparsers.add_parser('workspaces')
+        parser_workspaces.set_defaults(func=self.workspaces)
+        parser_timesheet = subparsers.add_parser('daysworked')
+        parser_timesheet.set_defaults(func=self.daysworked)
+    
     def execute(self):
-        if self.workspaces:
-            workspaces = Workspaces(self.toggl_url)
-            print(workspaces)
-        elif self.timesheet:
-            print(DaysWorked(self.reports_url))
+        args = self.parser.parse_args(self.arguments)
+        args.func(args)
+        
+    def workspaces(self, args):
+        workspaces = Workspaces(args.toggl_url)
+        print(workspaces)
+    
+    def daysworked(self, args):
+        print(DaysWorked(args.reports_url))
+
 
 if __name__ == '__main__':
-   CLI(sys.argv[1:]).execute()
+    print('__main__')
+    cli = CLI(sys.argv[1:])
+    cli.execute()
