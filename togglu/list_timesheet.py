@@ -16,7 +16,7 @@ class ListTimesheet:
 
     def execute(self, query):
 
-        timesheet = self.detailed_report_service.overview(query.workspace_id, query.since, query.until)
+        timesheet = self.detailed_report_service.timesheet(query.workspace_id, query.since, query.until)
 
         return to_timesheet_response(timesheet)
 

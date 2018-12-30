@@ -19,7 +19,7 @@ class ListTimesheetTestCase(unittest.TestCase):
     @patch('togglu.timesheet_service.TimesheetService')
     def test_execute(self, detailed_report_service):
 
-        detailed_report_service.overview.return_value=Timesheet(
+        detailed_report_service.timesheet.return_value=Timesheet(
         [
             TimesheetDateEntry(date.fromisoformat('2018-12-16'), [TimesheetClientEntry('sylent', 8.5)]),
             TimesheetDateEntry(date.fromisoformat('2018-12-17'), [TimesheetClientEntry('euronoodle', 2.5), TimesheetClientEntry('sylent', 4)])
