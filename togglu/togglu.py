@@ -164,6 +164,8 @@ class CLI():
         parser_timesheet = subparsers.add_parser('timesheet')
         parser_timesheet.set_defaults(func=self.timesheet)
         parser_timesheet.add_argument('--workspace-id', required=True)
+        parser_timesheet.add_argument('--since')
+        parser_timesheet.add_argument('--until')
     
     def execute(self):
         args = self.parser.parse_args(self.arguments)

@@ -52,7 +52,7 @@ class TestCLI(unittest.TestCase):
 
         finally:
             sys.stderr = sys.__stderr__
-
+    
 class TestDaysWorking(unittest.TestCase):
 
     @patch('togglu.togglu.reports', side_effect=[
