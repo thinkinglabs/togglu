@@ -4,7 +4,7 @@ import json
 import math
 import sys
 
-from togglu.togglu import REPORTS_URL
+from togglu.constants import REPORTS_URL
 from togglu.timesheet import TimeEntries, TimeEntry
 
 class ReportsRepository:
