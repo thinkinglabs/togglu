@@ -54,49 +54,6 @@ class TestCLI(unittest.TestCase):
 
         finally:
             sys.stderr = sys.__stderr__
-    
-class TestDaysWorking(unittest.TestCase):
-
-    @patch('togglu.togglu.reports', side_effect=[
-            {
-                'total_count': 3,
-                'per_page': 1,
-                'data': [
-                    {'start': '2018-12-05T13:18:29+01:00'}
-                ]
-            },
-            {
-                'total_count': 3,
-                'per_page': 1,
-                'data': [
-                    {'start': '2018-12-05T08:55:26+01:00'}
-                ]
-            },
-            {
-                'total_count': 3,
-                'per_page': 1,
-                'data': [
-                    {'start': '2018-12-04T13:36:06+01:00'}
-                ]
-            }
-        ])
-    def test_calculate(self, reports):
-        actual_days_worked = togglu.DaysWorked.calculate()
-        self.assertEqual(actual_days_worked, 2)
-
-    def test_calculate_per_page(self):
-
-        time_entries = [
-            { 'start': '2018-12-06T14:57:18+01:00' },
-            { 'start': '2018-12-05T13:18:29+01:00' },
-            { 'start': '2018-12-05T08:55:26+01:00' },
-            { 'start': '2018-12-04T20:25:24+01:00' },
-            { 'start': '2018-12-04T20:09:09+01:00' },
-            { 'start': '2018-12-04T13:36:06+01:00' }
-        ]
-        (actual_days_worked, _) = togglu.DaysWorked.calculate_per_page(time_entries)
-        self.assertEqual(actual_days_worked, 3)
-
 
 class TestTogglU(unittest.TestCase):
 

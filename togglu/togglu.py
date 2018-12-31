@@ -70,49 +70,6 @@ class Workspaces:
             result += "{}:{}\n".format(workspace['id'], workspace['name'])
         return result
 
-class DaysWorked:
-
-    def __init__(self, reports_url = REPORTS_URL):
-        self.days_worked = 0
-
-        self.days_worked = self.calculate(reports_url)
-
-    @staticmethod
-    def calculate(reports_url = REPORTS_URL):
-        days_worked = 0
-        page = 1
-        previous_date = None
-
-        while True:
-            report = reports(reports_url, "/details", "get")
-            time_entries = report['data']
-
-            pages = math.ceil(report['total_count'] / report['per_page'])
-
-            (result, previous_date) = DaysWorked.calculate_per_page(time_entries, previous_date)
-            days_worked += result
-
-            page += 1
-            if page > pages:
-                break
-
-        return days_worked
-
-    @staticmethod
-    def calculate_per_page(time_entries, date=None):
-        days_worked = 0
-        previous_date = date
-        for time_entry in time_entries:
-            start = datetime.fromisoformat(time_entry['start'])
-            this_date = start.date()
-            days_worked += 0 if previous_date == this_date else 1
-            previous_date = this_date
-        return (days_worked, previous_date)
-
-    def __str__(self):
-        result = str(self.days_worked)
-        return result
-
 def toggl(base_url, request_uri, method, params=None, data=None, headers={'content-type' : 'application/json'}):
     """
     Makes an HTTP request to toggl.com. Returns the raw text data received.
@@ -130,26 +87,6 @@ def toggl(base_url, request_uri, method, params=None, data=None, headers={'conte
         print(e)
         print(r.text)
         sys.exit(1)
-
-def reports(base_url, request_uri, method, params=None, data=None, headers={'content-type': 'application/json'}):
-    """
-    Makes an HTTP request to toggl.com. Returns the raw text data received.
-    """
-    url = "{}{}?user_agent=togglu&workspace_id=509982&since=2018-11-01&page=1".format(base_url, request_uri)
-    try:
-        if method == 'get':
-            r = requests.get(url, auth=Config().get_auth(), params=params, data=data, headers=headers)
-        else:
-            raise NotImplementedError('HTTP method "{}" not implemented.'.format(method))
-        r.raise_for_status() # raise exception on error
-        return json.loads(r.text)
-    except Exception as e:
-        print('Sent: {}'.format(data))
-        print(e)
-        print(r.text)
-        sys.exit(1)
-
-
 
 class CLI():
 
