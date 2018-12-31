@@ -64,8 +64,8 @@ class TimesheetClientEntry:
 
 class TimeEntries:
 
-    def __init__(self, entries=[]):
-        self.entries = entries
+    def __init__(self, entries=None):
+        self.entries = [] if entries is None else entries
 
     def append(self, time_entry):
         self.entries.append(time_entry)

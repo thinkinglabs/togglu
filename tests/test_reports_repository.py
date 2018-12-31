@@ -100,10 +100,10 @@ class ReportsRepositoryTestCase(unittest.TestCase):
                 ]
             })
 
-            stub_url = 'http://localhost:{}'.format(imposter.port)
+            stub_url = f'http://localhost:{imposter.port}'
 
             sut = ReportsRepository(stub_url)
-            time_entries = sut.detailed_report("123")
+            time_entries = sut.detailed_report('123')
 
             expected = TimeEntries([
                 TimeEntry("Kaloo", "2018-12-06T14:57:18+01:00", 6850000),
@@ -116,7 +116,6 @@ class ReportsRepositoryTestCase(unittest.TestCase):
                 TimeEntry("Kwimbee", "2018-11-11T20:58:23+01:00", 171000)
                 ])
             self.assertEqual(time_entries, expected)
-
 
 if __name__ == '__main__':
     unittest.main()

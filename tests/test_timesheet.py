@@ -27,6 +27,14 @@ class TimesheetTestCase(unittest.TestCase):
                                        TimesheetClientEntry('lupicious', 456)
                                    ])
             ]))
+    
+    def test_add_time_entry_to_timesheet_with_same_and_same_client(self):
+        timesheet = Timesheet([TimesheetDateEntry(date.fromisoformat('2018-11-11'), [TimesheetClientEntry('retromm', 123)])])
+        timesheet.add(TimeEntry('retromm', '2018-11-11T21:02:16+01:00', 456))
+        self.assertEqual(timesheet, Timesheet(
+            [
+                TimesheetDateEntry(date.fromisoformat('2018-11-11'), [TimesheetClientEntry('retromm', 579)])
+            ]))
 
 class TimesheetDateEntryTestCase(unittest.TestCase):
 
@@ -44,6 +52,18 @@ class TimesheetDateEntryTestCase(unittest.TestCase):
 
 
 class TimeEntriesTestCase(unittest.TestCase):
+
+    def test_new_empty_timeentries_has_zero_entries(self):
+        time_entries = TimeEntries()
+        self.assertEqual(0, len(time_entries.entries), 'time_entries should have 0 entries')
+    
+    def test_new_empty_timeentries_should_always_be_empty(self):
+        time_entries1 = TimeEntries()
+        time_entries1.append(TimeEntry('retromm', '2018-11-11T21:02:16+01:00', 123))
+        time_entries1.append(TimeEntry('lupicious', '2018-11-12T21:02:16+01:00', 456))
+
+        time_entries2 = TimeEntries()
+        self.assertEqual(0, len(time_entries2.entries), 'time_entries2 should have 0 entries')
 
     def test_time_entries_not_equal_to_none(self):
         self.assertNotEquals(TimeEntries(), None)
