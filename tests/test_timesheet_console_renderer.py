@@ -36,9 +36,9 @@ class TestTimesheetConsoleRendererTest(unittest.TestCase):
             sut.render(1234)
 
             expected_output = \
-                '27.12.2018 | enicious                       |        2.5\n' \
-                '27.12.2018 | frontile                       |        4.0\n' \
-                '28.12.2018 | enicious                       |        1.0\n' \
+                '27.12.2018 | enicious                       |       2.50\n' \
+                '27.12.2018 | frontile                       |       4.00\n' \
+                '28.12.2018 | enicious                       |       1.00\n' \
                 'days worked: 2\n'
             
             self.assertEqual(actual_output.getvalue(), expected_output)

@@ -167,11 +167,11 @@ class TestTogglU(unittest.TestCase):
                 cli.execute()
                 
                 expected_output = \
-                    '06.12.2018 | Kaloo                          |        1.9\n' \
-                    '05.12.2018 | VooFix                         |        8.1\n' \
-                    '23.11.2018 | VooFix                         |        8.5\n' \
-                    '11.11.2018 | Wikimba                        |        0.1\n' \
-                    '11.11.2018 | Kwimbee                        |        0.0\n' \
+                    '06.12.2018 | Kaloo                          |       1.90\n' \
+                    '05.12.2018 | VooFix                         |       8.14\n' \
+                    '23.11.2018 | VooFix                         |       8.54\n' \
+                    '11.11.2018 | Wikimba                        |       0.11\n' \
+                    '11.11.2018 | Kwimbee                        |       0.05\n' \
                     'days worked: 4\n'
                 self.assertEqual(actual_output.getvalue(), expected_output)
         finally:
