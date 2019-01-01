@@ -1,10 +1,10 @@
+*.py[cod]
 __pycache__/
 
 #ignore JetBrains PyCharm project files
 .idea/
 #ignore VSCode workspace settings
 .vscode/
-
 
 mb*.log
 examples/
