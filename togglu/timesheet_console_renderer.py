@@ -6,9 +6,9 @@ class TimesheetConsoleRenderer():
     def __init__(self, list_timesheet):
         self.list_timesheet = list_timesheet
     
-    def render(self, workspace_id, since=None, until=None):
+    def render(self, workspace_id, since=None, until=None, client_id=None, tag_id=None):
 
-        result = self.list_timesheet.execute(TimesheetQuery(workspace_id, since, until))
+        result = self.list_timesheet.execute(TimesheetQuery(workspace_id, since, until, client_id, tag_id))
         
         for date_entry in result.entries:
             for client_entry in date_entry.entries:

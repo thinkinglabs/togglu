@@ -3,10 +3,12 @@ from togglu.timesheet_service import TimesheetService
 from togglu.timesheet_response import TimesheetResponse, TimesheetDateEntryResponse, TimesheetClientEntryResponse
 
 class TimesheetQuery:
-    def __init__(self, workspace_id, since = None, until = None):
+    def __init__(self, workspace_id, since = None, until = None, client_id = None, tag_id = None):
         self.workspace_id = workspace_id
         self.since = since
         self.until = until
+        self.client_id = client_id
+        self.tag_id = tag_id
 
 class ListTimesheet:
 
@@ -16,7 +18,7 @@ class ListTimesheet:
 
     def execute(self, query):
 
-        timesheet = self.detailed_report_service.timesheet(query.workspace_id, query.since, query.until)
+        timesheet = self.detailed_report_service.timesheet(query.workspace_id, query.since, query.until, query.client_id, query.tag_id)
 
         return to_timesheet_response(timesheet)
 
