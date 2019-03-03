@@ -116,6 +116,51 @@ class ReportsRepositoryTestCase(unittest.TestCase):
                 TimeEntry("Kwimbee", "2018-11-11T20:58:23+01:00", 171000)
                 ])
             self.assertEqual(time_entries, expected)
+    
+    def test_detailed_report_filter(self):
+
+        with open(os.path.join(THIS_DIR, os.pardir, 'tests/detailed_report_filter.json'), 'r') as myfile:
+            data = myfile.read().replace('\n', '')
+
+        with mountepy.Mountebank() as mb:
+            imposter = mb.add_imposter({
+                'protocol': 'http',
+                'port': port_for.select_random(),
+                'stubs': [
+                    {
+                        'predicates': [
+                            {
+                                'equals': {
+                                        'method': 'GET',
+                                        'path': '/details',
+                                        'query': { 'page': '1', 'since': '2018-11-23', 'until': '2018-11-23', 'client_ids': '456'}
+                                }
+                            }
+                        ],
+                        'responses': [
+                            {
+                                'is': {
+                                    'statusCode': 200,
+                                    'headers': {'Content-Type': 'application/json'},
+                                    'body': data
+                                }
+                            }
+                        ]
+                    }
+                ]
+            })
+
+            stub_url = f'http://localhost:{imposter.port}'
+
+            sut = ReportsRepository(stub_url)
+            time_entries = sut.detailed_report('123', since='2018-11-23', until='2018-11-23', client_id='456')
+
+            expected = TimeEntries([
+                TimeEntry("VooFix", "2018-11-23T20:00:18+01:00", 3821000),
+                TimeEntry("VooFix", "2018-11-23T13:53:15+01:00", 13576000),
+                TimeEntry("VooFix", "2018-11-23T08:56:20+01:00", 13360000)
+                ])
+            self.assertEqual(time_entries, expected)
 
 if __name__ == '__main__':
     unittest.main()
