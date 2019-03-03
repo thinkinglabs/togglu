@@ -23,7 +23,7 @@ THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 class ReportsRepositoryTestCase(unittest.TestCase):
 
-    def test_detailed_report(self):
+    def test_detailed_report_pagination(self):
 
         with open(os.path.join(THIS_DIR, os.pardir, 'tests/detailed_report_page1.json'), 'r') as myfile:
             data1 = myfile.read().replace('\n', '')
