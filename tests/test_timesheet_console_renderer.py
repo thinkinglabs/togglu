@@ -30,7 +30,7 @@ class TestTimesheetConsoleRendererTest(unittest.TestCase):
                 TimesheetDateEntryResponse(date.fromisoformat("2018-12-28"), [
                     TimesheetClientEntryResponse("enicious", 1 * 1000*60*60)
                 ])
-            ])
+            ], 2)
 
             sut = TimesheetConsoleRenderer(list_timesheet)
             sut.render(1234)

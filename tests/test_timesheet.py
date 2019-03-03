@@ -36,6 +36,19 @@ class TimesheetTestCase(unittest.TestCase):
                 TimesheetDateEntry(date.fromisoformat('2018-11-11'), [TimesheetClientEntry('retromm', 579)])
             ]))
 
+
+    def test_days_worked(self):
+        timesheet = Timesheet(
+            [
+              TimesheetDateEntry(date.fromisoformat('2018-11-11'), [TimesheetClientEntry('retromm', 123)]),
+              TimesheetDateEntry(date.fromisoformat('2018-11-12'), [TimesheetClientEntry('retromm', 123)]),
+              TimesheetDateEntry(date.fromisoformat('2018-11-13'), [TimesheetClientEntry('retromm', 123)])
+            ]
+          )
+        
+        self.assertEqual(3, timesheet.days_worked())
+
+
 class TimesheetDateEntryTestCase(unittest.TestCase):
 
     def test_add_time_entry_to_empty_timesheet_date_entry(self):

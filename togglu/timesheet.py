@@ -7,6 +7,9 @@ class Timesheet:
         self.entries = {}
         for date_entry in entries:
             self.entries[date_entry.date] = date_entry
+    
+    def days_worked(self):
+        return len(self.entries)
 
     def add(self, time_entry):
         self._add(datetime.fromisoformat(time_entry.start_date).date(), time_entry.client_name, time_entry.duration)
