@@ -13,8 +13,8 @@ class ReportsRepository:
         self.base_url = base_url
         self.config = config
 
-    def detailed_report(self, workspace_id, since = None, until = None, client_id = None):
-        params = {"workspace_id": workspace_id, "since": since, "until": until, "client_ids": client_id }
+    def detailed_report(self, workspace_id, since = None, until = None, client_id = None, tag_id = None):
+        params = {"workspace_id": workspace_id, "since": since, "until": until, "client_ids": client_id, "tag_ids": tag_id }
 
         time_entries = TimeEntries()
 

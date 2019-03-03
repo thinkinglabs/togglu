@@ -133,7 +133,7 @@ class ReportsRepositoryTestCase(unittest.TestCase):
                                 'equals': {
                                         'method': 'GET',
                                         'path': '/details',
-                                        'query': { 'page': '1', 'since': '2018-11-23', 'until': '2018-11-23', 'client_ids': '456'}
+                                        'query': { 'page': '1', 'since': '2018-11-23', 'until': '2018-11-23', 'client_ids': '456', 'tag_ids': '123456789'}
                                 }
                             }
                         ],
@@ -153,7 +153,7 @@ class ReportsRepositoryTestCase(unittest.TestCase):
             stub_url = f'http://localhost:{imposter.port}'
 
             sut = ReportsRepository(stub_url)
-            time_entries = sut.detailed_report('123', since='2018-11-23', until='2018-11-23', client_id='456')
+            time_entries = sut.detailed_report('123', since='2018-11-23', until='2018-11-23', client_id='456', tag_id='123456789')
 
             expected = TimeEntries([
                 TimeEntry("VooFix", "2018-11-23T20:00:18+01:00", 3821000),
