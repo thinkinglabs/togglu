@@ -14,5 +14,6 @@ class TimesheetConsoleRenderer():
             for client_entry in date_entry.entries:
                 print(f'{date_entry.date.strftime("%x"):<10} | {client_entry.client_name:<30} | {client_entry.duration / 1000/60/60:=10.2f}')
         
-        print(f'days worked: {result.get_days_worked()}')
+        print(f'total hours: {result.get_duration() / 1000/60/60:=4.2f}')
+        print(f'days worked: {result.get_days_worked():=4.2f}')
         

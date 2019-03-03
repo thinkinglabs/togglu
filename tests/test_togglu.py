@@ -173,7 +173,8 @@ class TestTogglU(unittest.TestCase):
                     '23.11.2018 | VooFix                         |       8.54\n' \
                     '11.11.2018 | Wikimba                        |       0.11\n' \
                     '11.11.2018 | Kwimbee                        |       0.05\n' \
-                    'days worked: 4\n'
+                    'total hours: 18.74\n' \
+                    'days worked: 4.00\n'
                 self.assertEqual(actual_output.getvalue(), expected_output)
         finally:
             sys.stdout = sys.__stdout__

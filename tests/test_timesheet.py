@@ -47,6 +47,17 @@ class TimesheetTestCase(unittest.TestCase):
           )
         
         self.assertEqual(3, timesheet.days_worked())
+    
+    def test_duration(self):
+        timesheet = Timesheet(
+            [
+              TimesheetDateEntry(date.fromisoformat('2018-11-11'), [TimesheetClientEntry('retromm', 123)]),
+              TimesheetDateEntry(date.fromisoformat('2018-11-12'), [TimesheetClientEntry('retromm', 123)]),
+              TimesheetDateEntry(date.fromisoformat('2018-11-13'), [TimesheetClientEntry('retromm', 123)])
+            ]
+          )
+        
+        self.assertEqual(369, timesheet.duration())
 
 
 class TimesheetDateEntryTestCase(unittest.TestCase):
@@ -62,6 +73,13 @@ class TimesheetDateEntryTestCase(unittest.TestCase):
         timesheet_date_entry.add('retromm', 4)
 
         self.assertEqual(timesheet_date_entry, TimesheetDateEntry(date.fromisoformat('2018-11-11'), [TimesheetClientEntry('retromm', 9)]))
+    
+    def test_duration(self):
+        timesheet_date_entry = TimesheetDateEntry(date.fromisoformat('2018-11-11'))
+        timesheet_date_entry.add('retromm', 123)
+        timesheet_date_entry.add('lupicious', 456)
+
+        self.assertEqual(579, timesheet_date_entry.duration())
 
 
 class TimeEntriesTestCase(unittest.TestCase):

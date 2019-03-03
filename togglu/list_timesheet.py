@@ -23,7 +23,7 @@ class ListTimesheet:
         return to_timesheet_response(timesheet)
 
 def to_timesheet_response(timesheet):
-    return TimesheetResponse(list(map(to_date_entry_response, timesheet.entries.values())), timesheet.days_worked())
+    return TimesheetResponse(list(map(to_date_entry_response, timesheet.entries.values())), timesheet.days_worked(), timesheet.duration())
 
 def to_date_entry_response(timesheet_date_entry):
         return TimesheetDateEntryResponse(timesheet_date_entry.date, list(map(to_customer_entry_response, timesheet_date_entry.entries.values())))

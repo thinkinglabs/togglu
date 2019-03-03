@@ -30,7 +30,7 @@ class TestTimesheetConsoleRendererTest(unittest.TestCase):
                 TimesheetDateEntryResponse(date.fromisoformat("2018-12-28"), [
                     TimesheetClientEntryResponse("enicious", 1 * 1000*60*60)
                 ])
-            ], 2)
+            ], 2, 7.50 * 1000*60*60)
 
             sut = TimesheetConsoleRenderer(list_timesheet)
             sut.render(1234)
@@ -39,7 +39,8 @@ class TestTimesheetConsoleRendererTest(unittest.TestCase):
                 '27.12.2018 | enicious                       |       2.50\n' \
                 '27.12.2018 | frontile                       |       4.00\n' \
                 '28.12.2018 | enicious                       |       1.00\n' \
-                'days worked: 2\n'
+                'total hours: 7.50\n' \
+                'days worked: 2.00\n'
             
             self.assertEqual(actual_output.getvalue(), expected_output)
 

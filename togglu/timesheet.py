@@ -1,5 +1,6 @@
 
 from datetime import datetime
+from functools import reduce
 
 class Timesheet:
 
@@ -10,6 +11,12 @@ class Timesheet:
     
     def days_worked(self):
         return len(self.entries)
+    
+    def duration(self):
+        result = 0
+        for key, value in self.entries.items():
+          result += value.duration()
+        return result
 
     def add(self, time_entry):
         self._add(datetime.fromisoformat(time_entry.start_date).date(), time_entry.client_name, time_entry.duration)
@@ -44,6 +51,12 @@ class TimesheetDateEntry:
         client_entry = self.entries[client_name]
 
         client_entry.duration += duration
+    
+    def duration(self):
+        result = 0
+        for key, value in self.entries.items():
+          result += value.duration
+        return result
 
     def __eq__(self, other):
         return self.date == other.date and \
@@ -72,7 +85,7 @@ class TimeEntries:
 
     def append(self, time_entry):
         self.entries.append(time_entry)
-
+    
     def __eq__(self, other):
         return other is not None and \
             other.__class__.__name__ == 'TimeEntries' and \
