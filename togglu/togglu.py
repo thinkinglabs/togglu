@@ -103,6 +103,8 @@ class CLI():
         parser_timesheet.add_argument('--workspace-id', required=True)
         parser_timesheet.add_argument('--since')
         parser_timesheet.add_argument('--until')
+        parser_timesheet.add_argument('--client-id')
+        parser_timesheet.add_argument('--tag-id')
     
     def execute(self):
         args = self.parser.parse_args(self.arguments)
@@ -114,7 +116,12 @@ class CLI():
     
     def timesheet(self, args):
         renderer = TimesheetConsoleRenderer(ListTimesheet(TimesheetService(ReportsRepository(args.reports_url, Config()))))
-        renderer.render(args.workspace_id, args.since if hasattr(args, 'since') else None, args.until if hasattr(args, 'until') else None)
+        renderer.render(
+          args.workspace_id, 
+          args.since if hasattr(args, 'since') else None, 
+          args.until if hasattr(args, 'until') else None, 
+          args.client_id if hasattr(args, 'client_id') else None, 
+          args.tag_id if hasattr(args, 'tag_id') else None, )
 
 
 if __name__ == '__main__':

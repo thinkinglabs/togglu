@@ -47,7 +47,8 @@ class TestCLI(unittest.TestCase):
         except SystemExit:
             expected_output = \
                 'usage: togglu.py timesheet [-h] --workspace-id WORKSPACE_ID [--since SINCE]\n' \
-                '                           [--until UNTIL]\n' \
+                '                           [--until UNTIL] [--client-id CLIENT_ID]\n' \
+                '                           [--tag-id TAG_ID]\n' \
                 'togglu.py timesheet: error: the following arguments are required: --workspace-id\n'
                 
             self.assertEqual(actual_output.getvalue(), expected_output)
