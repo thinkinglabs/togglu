@@ -1,5 +1,5 @@
 all: init test
-.PHONY: all
+.PHONY: init all
 
 init:
 	pip install -r requirements.txt
