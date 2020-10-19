@@ -1,9 +1,2 @@
-certifi==2018.11.29
-chardet==3.0.4
-idna==2.6
-mountepy==0.4.1
-port-for==0.4
-python-dateutil==2.7.5
 requests==2.22.0
-six==1.11.0
-urllib3==1.25.7
+mountepy==0.4.1
