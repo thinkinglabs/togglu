@@ -3,7 +3,14 @@
 import unittest
 from unittest.mock import patch
 import mountepy
+
+from http.server import BaseHTTPRequestHandler, HTTPServer
+import socket
+from threading import Thread
 import port_for
+from urllib.parse import urlparse, parse_qs
+
+import requests
 
 import os
 from datetime import date
@@ -21,9 +28,8 @@ from togglu.list_timesheet import ListTimesheet
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
-class ReportsRepositoryTestCase(unittest.TestCase):
-
-    def test_detailed_report_pagination(self):
+class DetailedReportPaginationRequestHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
 
         with open(os.path.join(THIS_DIR, os.pardir, 'tests/detailed_report_page1.json'), 'r') as myfile:
             data1 = myfile.read().replace('\n', '')
@@ -31,136 +37,115 @@ class ReportsRepositoryTestCase(unittest.TestCase):
             data2 = myfile.read().replace('\n', '')
         with open(os.path.join(THIS_DIR, os.pardir, 'tests/detailed_report_page3.json'), 'r') as myfile:
             data3 = myfile.read().replace('\n', '')
+        
+        # Process an HTTP GET request and return a response with an HTTP 200 status.
+        self.send_response(requests.codes.ok)
+        self.send_header('Content-Type', 'application/json')
+        self.end_headers()
 
-        with mountepy.Mountebank() as mb:
-            imposter = mb.add_imposter({
-                'protocol': 'http',
-                'port': port_for.select_random(),
-                'stubs': [
-                    {
-                        'predicates': [
-                            {
-                                'equals': {
-                                    'method': 'GET',
-                                    'path': '/details',
-                                    'query': { 'page': '1'}
-                                }
-                            }
-                        ],
-                        'responses': [
-                            {
-                                'is': {
-                                    'statusCode': 200,
-                                    'headers': {'Content-Type': 'application/json'},
-                                    'body': data1
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        'predicates': [
-                            {
-                                'equals': {
-                                        'method': 'GET',
-                                        'path': '/details',
-                                        'query': { 'page': '2'}
-                                }
-                            }
-                        ],
-                        'responses': [
-                            {
-                                'is': {
-                                    'statusCode': 200,
-                                    'headers': {'Content-Type': 'application/json'},
-                                    'body': data2
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        'predicates': [
-                            {
-                                'equals': {
-                                    'method': 'GET',
-                                    'path': '/details',
-                                        'query': { 'page': '3'}
-                                }
-                            }
-                        ],
-                        'responses': [
-                            {
-                                'is': {
-                                    'statusCode': 200,
-                                    'headers': {'Content-Type': 'application/json'},
-                                    'body': data3
-                                }
-                            }
-                        ]
-                    }
-                ]
-            })
+        url = urlparse(self.path)
+        if url.path == '/details':
+            query = parse_qs(url.query)
+            page = query['page'][0]
+            
+            if page == '1':
+                self.wfile.write(bytes(data1, "utf-8"))
+            elif page == '2':
+                self.wfile.write(bytes(data2, "utf-8"))
+            elif page == '3':
+                self.wfile.write(bytes(data3, "utf-8"))
 
-            stub_url = f'http://localhost:{imposter.port}'
+        return
 
-            sut = ReportsRepository(stub_url)
-            time_entries = sut.detailed_report('123')
 
-            expected = TimeEntries([
-                TimeEntry("Kaloo", "2018-12-06T14:57:18+01:00", 6850000),
-                TimeEntry("VooFix", "2018-12-05T13:18:29+01:00", 17932000),
-                TimeEntry("VooFix", "2018-12-05T08:55:26+01:00", 11361000),
-                TimeEntry("VooFix", "2018-11-23T20:00:18+01:00", 3821000),
-                TimeEntry("VooFix", "2018-11-23T13:53:15+01:00", 13576000),
-                TimeEntry("VooFix", "2018-11-23T08:56:20+01:00", 13360000),
-                TimeEntry("Wikimba", "2018-11-11T21:02:16+01:00", 391000),
-                TimeEntry("Kwimbee", "2018-11-11T20:58:23+01:00", 171000)
-                ])
-            self.assertEqual(time_entries, expected)
-    
-    def test_detailed_report_filter(self):
+class DetailedReportFilterRequestHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
 
         with open(os.path.join(THIS_DIR, os.pardir, 'tests/detailed_report_filter.json'), 'r') as myfile:
             data = myfile.read().replace('\n', '')
+        
+        # Process an HTTP GET request and return a response with an HTTP 200 status.
+        self.send_response(requests.codes.ok)
+        self.send_header('Content-Type', 'application/json')
+        self.end_headers()
 
-        with mountepy.Mountebank() as mb:
-            imposter = mb.add_imposter({
-                'protocol': 'http',
-                'port': port_for.select_random(),
-                'stubs': [
-                    {
-                        'predicates': [
-                            {
-                                'equals': {
-                                        'method': 'GET',
-                                        'path': '/details',
-                                        'query': { 'page': '1', 'since': '2018-11-23', 'until': '2018-11-23', 'client_ids': '456', 'tag_ids': '123456789'}
-                                }
-                            }
-                        ],
-                        'responses': [
-                            {
-                                'is': {
-                                    'statusCode': 200,
-                                    'headers': {'Content-Type': 'application/json'},
-                                    'body': data
-                                }
-                            }
-                        ]
-                    }
-                ]
-            })
+        url = urlparse(self.path)
+        if url.path == '/details':
+            query = parse_qs(url.query)
+            page = query['page'][0]
+            since = query['since'][0]
+            until = query['until'][0]
+            client_ids = query['client_ids'][0]
+            tag_ids = query['tag_ids'][0]
+            
+            if (
+                page == '1' 
+                and since == '2018-11-23'
+                and until == '2018-11-23'
+                and tag_ids == '123456789'
+                and client_ids == '456'
+            ):  
+                self.wfile.write(bytes(data, "utf-8"))
+            
+        return
 
-            stub_url = f'http://localhost:{imposter.port}'
+def get_free_port():
+    s = socket.socket(socket.AF_INET, type=socket.SOCK_STREAM)
+    s.bind(('localhost', 0))
+    address, port = s.getsockname()
+    s.close()
+    return port
 
-            sut = ReportsRepository(stub_url)
-            time_entries = sut.detailed_report('123', since='2018-11-23', until='2018-11-23', client_id='456', tag_id='123456789')
+class ReportsRepositoryTestCase(unittest.TestCase):
 
-            expected = TimeEntries([
-                TimeEntry("VooFix", "2018-11-23T20:00:18+01:00", 3821000),
-                TimeEntry("VooFix", "2018-11-23T13:53:15+01:00", 13576000),
-                TimeEntry("VooFix", "2018-11-23T08:56:20+01:00", 13360000)
-                ])
-            self.assertEqual(time_entries, expected)
+    def test_detailed_report_pagination(self):
+        mock_server_port = get_free_port()
+        mock_server = HTTPServer(('localhost', mock_server_port), DetailedReportPaginationRequestHandler)
+
+        # Start running mock server in a separate thread.
+        # Daemon threads automatically shut down when the main process exits.
+        mock_server_thread = Thread(target=mock_server.serve_forever)
+        mock_server_thread.setDaemon(True)
+        mock_server_thread.start()
+
+        stub_url = f'http://localhost:{mock_server_port}'
+
+        sut = ReportsRepository(stub_url)
+        time_entries = sut.detailed_report('123')
+
+        expected = TimeEntries([
+            TimeEntry("Kaloo", "2018-12-06T14:57:18+01:00", 6850000),
+            TimeEntry("VooFix", "2018-12-05T13:18:29+01:00", 17932000),
+            TimeEntry("VooFix", "2018-12-05T08:55:26+01:00", 11361000),
+            TimeEntry("VooFix", "2018-11-23T20:00:18+01:00", 3821000),
+            TimeEntry("VooFix", "2018-11-23T13:53:15+01:00", 13576000),
+            TimeEntry("VooFix", "2018-11-23T08:56:20+01:00", 13360000),
+            TimeEntry("Wikimba", "2018-11-11T21:02:16+01:00", 391000),
+            TimeEntry("Kwimbee", "2018-11-11T20:58:23+01:00", 171000)
+            ])
+        self.assertEqual(time_entries, expected)
+    
+    def test_detailed_report_filter(self):
+        mock_server_port = get_free_port()
+        mock_server = HTTPServer(('localhost', mock_server_port), DetailedReportFilterRequestHandler)
+
+        # Start running mock server in a separate thread.
+        # Daemon threads automatically shut down when the main process exits.
+        mock_server_thread = Thread(target=mock_server.serve_forever)
+        mock_server_thread.setDaemon(True)
+        mock_server_thread.start()
+
+        stub_url = f'http://localhost:{mock_server_port}'
+
+        sut = ReportsRepository(stub_url)
+        time_entries = sut.detailed_report('123', since='2018-11-23', until='2018-11-23', client_id='456', tag_id='123456789')
+
+        expected = TimeEntries([
+            TimeEntry("VooFix", "2018-11-23T20:00:18+01:00", 3821000),
+            TimeEntry("VooFix", "2018-11-23T13:53:15+01:00", 13576000),
+            TimeEntry("VooFix", "2018-11-23T08:56:20+01:00", 13360000)
+            ])
+        self.assertEqual(time_entries, expected)
 
 if __name__ == '__main__':
     unittest.main()
