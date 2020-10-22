@@ -2,15 +2,12 @@
 
 import unittest
 from unittest.mock import patch
-import mountepy
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import socket
 from threading import Thread
 import port_for
 from urllib.parse import urlparse, parse_qs
-
-import requests
 
 import os
 from datetime import date
@@ -39,7 +36,7 @@ class DetailedReportPaginationRequestHandler(BaseHTTPRequestHandler):
             data3 = myfile.read().replace('\n', '')
         
         # Process an HTTP GET request and return a response with an HTTP 200 status.
-        self.send_response(requests.codes.ok)
+        self.send_response(200)
         self.send_header('Content-Type', 'application/json')
         self.end_headers()
 
@@ -65,7 +62,7 @@ class DetailedReportFilterRequestHandler(BaseHTTPRequestHandler):
             data = myfile.read().replace('\n', '')
         
         # Process an HTTP GET request and return a response with an HTTP 200 status.
-        self.send_response(requests.codes.ok)
+        self.send_response(200)
         self.send_header('Content-Type', 'application/json')
         self.end_headers()
 

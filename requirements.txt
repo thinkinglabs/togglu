@@ -1,2 +1,1 @@
 requests==2.22.0
-mountepy==0.4.1
