@@ -3,11 +3,9 @@
 import unittest
 from unittest.mock import patch
 
-from http.server import BaseHTTPRequestHandler, HTTPServer
-import socket
-from threading import Thread
-import port_for
+from http.server import BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
+from .helpers import mock_http_server
 
 import os
 from datetime import date
@@ -86,24 +84,10 @@ class DetailedReportFilterRequestHandler(BaseHTTPRequestHandler):
             
         return
 
-def get_free_port():
-    s = socket.socket(socket.AF_INET, type=socket.SOCK_STREAM)
-    s.bind(('localhost', 0))
-    address, port = s.getsockname()
-    s.close()
-    return port
-
 class ReportsRepositoryTestCase(unittest.TestCase):
 
     def test_detailed_report_pagination(self):
-        mock_server_port = get_free_port()
-        mock_server = HTTPServer(('localhost', mock_server_port), DetailedReportPaginationRequestHandler)
-
-        # Start running mock server in a separate thread.
-        # Daemon threads automatically shut down when the main process exits.
-        mock_server_thread = Thread(target=mock_server.serve_forever)
-        mock_server_thread.setDaemon(True)
-        mock_server_thread.start()
+        mock_server_port = mock_http_server(DetailedReportPaginationRequestHandler)
 
         stub_url = f'http://localhost:{mock_server_port}'
 
@@ -123,15 +107,8 @@ class ReportsRepositoryTestCase(unittest.TestCase):
         self.assertEqual(time_entries, expected)
     
     def test_detailed_report_filter(self):
-        mock_server_port = get_free_port()
-        mock_server = HTTPServer(('localhost', mock_server_port), DetailedReportFilterRequestHandler)
-
-        # Start running mock server in a separate thread.
-        # Daemon threads automatically shut down when the main process exits.
-        mock_server_thread = Thread(target=mock_server.serve_forever)
-        mock_server_thread.setDaemon(True)
-        mock_server_thread.start()
-
+        mock_server_port = mock_http_server(DetailedReportFilterRequestHandler)
+        
         stub_url = f'http://localhost:{mock_server_port}'
 
         sut = ReportsRepository(stub_url)
