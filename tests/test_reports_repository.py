@@ -5,7 +5,8 @@ from unittest.mock import patch
 
 from http.server import BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
-from .helpers import mock_http_server
+from .helpers.http import mock_http_server
+from .helpers.http import DetailedReportPaginationRequestHandler, DetailedReportFilterRequestHandler
 
 import os
 from datetime import date
@@ -20,69 +21,6 @@ from togglu.timesheet_response import TimesheetResponse, TimesheetDateEntryRespo
 
 from togglu.timesheet_service import TimesheetService
 from togglu.list_timesheet import ListTimesheet
-
-THIS_DIR = os.path.dirname(os.path.abspath(__file__))
-
-class DetailedReportPaginationRequestHandler(BaseHTTPRequestHandler):
-    def do_GET(self):
-
-        with open(os.path.join(THIS_DIR, os.pardir, 'tests/detailed_report_page1.json'), 'r') as myfile:
-            data1 = myfile.read().replace('\n', '')
-        with open(os.path.join(THIS_DIR, os.pardir, 'tests/detailed_report_page2.json'), 'r') as myfile:
-            data2 = myfile.read().replace('\n', '')
-        with open(os.path.join(THIS_DIR, os.pardir, 'tests/detailed_report_page3.json'), 'r') as myfile:
-            data3 = myfile.read().replace('\n', '')
-        
-        # Process an HTTP GET request and return a response with an HTTP 200 status.
-        self.send_response(200)
-        self.send_header('Content-Type', 'application/json')
-        self.end_headers()
-
-        url = urlparse(self.path)
-        if url.path == '/details':
-            query = parse_qs(url.query)
-            page = query['page'][0]
-            
-            if page == '1':
-                self.wfile.write(bytes(data1, "utf-8"))
-            elif page == '2':
-                self.wfile.write(bytes(data2, "utf-8"))
-            elif page == '3':
-                self.wfile.write(bytes(data3, "utf-8"))
-
-        return
-
-
-class DetailedReportFilterRequestHandler(BaseHTTPRequestHandler):
-    def do_GET(self):
-
-        with open(os.path.join(THIS_DIR, os.pardir, 'tests/detailed_report_filter.json'), 'r') as myfile:
-            data = myfile.read().replace('\n', '')
-        
-        # Process an HTTP GET request and return a response with an HTTP 200 status.
-        self.send_response(200)
-        self.send_header('Content-Type', 'application/json')
-        self.end_headers()
-
-        url = urlparse(self.path)
-        if url.path == '/details':
-            query = parse_qs(url.query)
-            page = query['page'][0]
-            since = query['since'][0]
-            until = query['until'][0]
-            client_ids = query['client_ids'][0]
-            tag_ids = query['tag_ids'][0]
-            
-            if (
-                page == '1' 
-                and since == '2018-11-23'
-                and until == '2018-11-23'
-                and tag_ids == '123456789'
-                and client_ids == '456'
-            ):  
-                self.wfile.write(bytes(data, "utf-8"))
-            
-        return
 
 class ReportsRepositoryTestCase(unittest.TestCase):
 

@@ -1,20 +1,15 @@
 #!/usr/bin/env python3
 
 import unittest
-from unittest.mock import patch
 import io
 import locale
 import sys
-import os
 
-from http.server import BaseHTTPRequestHandler
-from urllib.parse import urlparse, parse_qs
-from .helpers import mock_http_server
+from .helpers.http import mock_http_server
+from .helpers.http import WorkspacesRequestHandler, DetailedReportPaginationRequestHandler
 
 from .context import togglu
 from togglu import togglu
-
-THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 class TestCLI(unittest.TestCase):
 
@@ -56,52 +51,6 @@ class TestCLI(unittest.TestCase):
 
         finally:
             sys.stderr = sys.__stderr__
-
-class WorkspacesRequestHandler(BaseHTTPRequestHandler):
-    def do_GET(self):
-
-        with open(os.path.join(THIS_DIR, os.pardir,'tests/workspaces.json'), 'r') as myfile:
-            data = myfile.read().replace('\n', '')
-        
-        # Process an HTTP GET request and return a response with an HTTP 200 status.
-        self.send_response(200)
-        self.send_header('Content-Type', 'application/json')
-        self.end_headers()
-
-        url = urlparse(self.path)
-        if url.path == '/workspaces':
-            self.wfile.write(bytes(data, "utf-8"))
-
-        return
-
-class DetailedReportPaginationRequestHandler(BaseHTTPRequestHandler):
-    def do_GET(self):
-
-        with open(os.path.join(THIS_DIR, os.pardir, 'tests/detailed_report_page1.json'), 'r') as myfile:
-            data1 = myfile.read().replace('\n', '')
-        with open(os.path.join(THIS_DIR, os.pardir, 'tests/detailed_report_page2.json'), 'r') as myfile:
-            data2 = myfile.read().replace('\n', '')
-        with open(os.path.join(THIS_DIR, os.pardir, 'tests/detailed_report_page3.json'), 'r') as myfile:
-            data3 = myfile.read().replace('\n', '')
-        
-        # Process an HTTP GET request and return a response with an HTTP 200 status.
-        self.send_response(200)
-        self.send_header('Content-Type', 'application/json')
-        self.end_headers()
-
-        url = urlparse(self.path)
-        if url.path == '/details':
-            query = parse_qs(url.query)
-            page = query['page'][0]
-            
-            if page == '1':
-                self.wfile.write(bytes(data1, "utf-8"))
-            elif page == '2':
-                self.wfile.write(bytes(data2, "utf-8"))
-            elif page == '3':
-                self.wfile.write(bytes(data3, "utf-8"))
-
-        return
 
 class TestTogglU(unittest.TestCase):
 
