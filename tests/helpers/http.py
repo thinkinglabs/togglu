@@ -31,10 +31,7 @@ def mock_http_server(request_handler):
 class WorkspacesRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
 
-        with open(os.path.join(
-                THIS_DIR,
-                os.pardir,
-                'data/workspaces.json'), 'r') as myfile:
+        with open(os.path.join(THIS_DIR, os.pardir, 'data/workspaces.json'), 'r') as myfile:
             data = myfile.read().replace('\n', '')
 
         # Process an HTTP GET request and return a response with an HTTP 200
@@ -53,20 +50,11 @@ class WorkspacesRequestHandler(BaseHTTPRequestHandler):
 class DetailedReportPaginationRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
 
-        with open(os.path.join(
-                THIS_DIR,
-                os.pardir,
-                'data/detailed_report_page1.json'), 'r') as myfile:
+        with open(os.path.join(THIS_DIR, os.pardir, 'data/detailed_report_page1.json'), 'r') as myfile:
             data1 = myfile.read().replace('\n', '')
-        with open(os.path.join(
-                THIS_DIR,
-                os.pardir,
-                'data/detailed_report_page2.json'), 'r') as myfile:
+        with open(os.path.join(THIS_DIR, os.pardir, 'data/detailed_report_page2.json'), 'r') as myfile:
             data2 = myfile.read().replace('\n', '')
-        with open(os.path.join(
-                THIS_DIR,
-                os.pardir,
-                'data/detailed_report_page3.json'), 'r') as myfile:
+        with open(os.path.join(THIS_DIR, os.pardir, 'data/detailed_report_page3.json'), 'r') as myfile:
             data3 = myfile.read().replace('\n', '')
 
         # Process an HTTP GET request and return a response with an HTTP 200
