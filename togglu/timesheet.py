@@ -1,21 +1,21 @@
 
 from datetime import datetime
-from functools import reduce
+
 
 class Timesheet:
 
-    def __init__(self, entries = []):
+    def __init__(self, entries=[]):
         self.entries = {}
         for date_entry in entries:
             self.entries[date_entry.date] = date_entry
-    
+
     def days_worked(self):
         return len(self.entries)
-    
+
     def duration(self):
         result = 0
         for key, value in self.entries.items():
-          result += value.duration()
+            result += value.duration()
         return result
 
     def add(self, time_entry):
@@ -36,9 +36,10 @@ class Timesheet:
     def __repr__(self):
         return "Timesheet(entries=%r)" % (self.entries)
 
+
 class TimesheetDateEntry:
 
-    def __init__(self, date, entries = []):
+    def __init__(self, date, entries=[]):
         self.date = date
         self.entries = {}
         for entry in entries:
@@ -51,32 +52,34 @@ class TimesheetDateEntry:
         client_entry = self.entries[client_name]
 
         client_entry.duration += duration
-    
+
     def duration(self):
         result = 0
         for key, value in self.entries.items():
-          result += value.duration
+            result += value.duration
         return result
 
     def __eq__(self, other):
         return self.date == other.date and \
-               self.entries == other.entries
+            self.entries == other.entries
 
     def __repr__(self):
         return "TimesheetDateEntry(date=%r, entries=%r)" % (self.date, self.entries)
 
+
 class TimesheetClientEntry:
 
-    def __init__(self, client_name, duration = 0):
+    def __init__(self, client_name, duration=0):
         self.client_name = client_name
         self.duration = duration
 
     def __eq__(self, other):
         return self.client_name == other.client_name and \
-               self.duration == other.duration
+            self.duration == other.duration
 
     def __repr__(self):
         return "TimesheetClientEntry(client_name=%r, duration=%r)" % (self.client_name, self.duration)
+
 
 class TimeEntries:
 
@@ -85,7 +88,7 @@ class TimeEntries:
 
     def append(self, time_entry):
         self.entries.append(time_entry)
-    
+
     def __eq__(self, other):
         return other is not None and \
             other.__class__.__name__ == 'TimeEntries' and \
@@ -96,6 +99,7 @@ class TimeEntries:
 
     def __repr__(self):
         return "TimeEntries(entries=%r)" % (self.entries)
+
 
 class TimeEntry:
 
@@ -110,4 +114,6 @@ class TimeEntry:
             self.duration == other.duration
 
     def __repr__(self):
-        return "TimeEntry(client_name=%r, start_date=%r, duration=%r)" % (self.client_name, self.start_date, self.duration)
+        return "TimeEntry(client_name=%r, start_date=%r, duration=%r)" % (
+            self.client_name, self.start_date, self.duration
+        )

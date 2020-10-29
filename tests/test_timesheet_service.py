@@ -5,14 +5,10 @@ from unittest.mock import patch
 
 from datetime import date
 
-from .context import togglu
-
-from togglu.list_timesheet import TimesheetQuery
+from .context import togglu  # noqa: F401
 from togglu.timesheet import Timesheet, TimesheetDateEntry, TimesheetClientEntry, TimeEntries, TimeEntry
-from togglu.timesheet_response import TimesheetResponse, TimesheetDateEntryResponse, TimesheetClientEntryResponse
-
 from togglu.timesheet_service import TimesheetService
-from togglu.list_timesheet import ListTimesheet
+
 
 class DetailedReportServiceTestCase(unittest.TestCase):
 

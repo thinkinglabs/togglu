@@ -3,8 +3,6 @@
 import sys
 import os
 import argparse
-import math
-from datetime import datetime
 
 import requests
 import json
@@ -15,6 +13,7 @@ from togglu.timesheet_console_renderer import TimesheetConsoleRenderer
 from togglu.list_timesheet import ListTimesheet
 from togglu.timesheet_service import TimesheetService
 from togglu.reports_repository import ReportsRepository
+
 
 class Config(object):
     """
@@ -59,9 +58,10 @@ class Config(object):
     def get_auth(self):
         return requests.auth.HTTPBasicAuth(self.get('auth', 'api_token'), 'api_token')
 
+
 class Workspaces:
 
-    def __init__(self, toggl_url = TOGGL_URL):
+    def __init__(self, toggl_url=TOGGL_URL):
         self.workspaces = toggl(toggl_url, "/workspaces", "get")
 
     def __str__(self):
@@ -70,7 +70,8 @@ class Workspaces:
             result += "{}:{}\n".format(workspace['id'], workspace['name'])
         return result
 
-def toggl(base_url, request_uri, method, params=None, data=None, headers={'content-type' : 'application/json'}):
+
+def toggl(base_url, request_uri, method, params=None, data=None, headers={'content-type': 'application/json'}):
     """
     Makes an HTTP request to toggl.com. Returns the raw text data received.
     """
@@ -80,13 +81,14 @@ def toggl(base_url, request_uri, method, params=None, data=None, headers={'conte
             r = requests.get(url, auth=Config().get_auth(), params=params, data=data, headers=headers)
         else:
             raise NotImplementedError('HTTP method "{}" not implemented.'.format(method))
-        r.raise_for_status() # raise exception on error
+        r.raise_for_status()  # raise exception on error
         return json.loads(r.text)
     except Exception as e:
         print('Sent: {}'.format(data))
         print(e)
         print(r.text)
         sys.exit(1)
+
 
 class CLI():
 
@@ -105,23 +107,30 @@ class CLI():
         parser_timesheet.add_argument('--until')
         parser_timesheet.add_argument('--client-id')
         parser_timesheet.add_argument('--tag-id')
-    
+
     def execute(self):
         args = self.parser.parse_args(self.arguments)
         args.func(args)
-        
+
     def workspaces(self, args):
         workspaces = Workspaces(args.toggl_url)
         print(workspaces)
-    
+
     def timesheet(self, args):
-        renderer = TimesheetConsoleRenderer(ListTimesheet(TimesheetService(ReportsRepository(args.reports_url, Config()))))
+        renderer = TimesheetConsoleRenderer(
+            ListTimesheet(
+                TimesheetService(
+                    ReportsRepository(args.reports_url, Config())
+                )
+            )
+        )
         renderer.render(
-          args.workspace_id, 
-          args.since if hasattr(args, 'since') else None, 
-          args.until if hasattr(args, 'until') else None, 
-          args.client_id if hasattr(args, 'client_id') else None, 
-          args.tag_id if hasattr(args, 'tag_id') else None, )
+            args.workspace_id,
+            args.since if hasattr(args, 'since') else None,
+            args.until if hasattr(args, 'until') else None,
+            args.client_id if hasattr(args, 'client_id') else None,
+            args.tag_id if hasattr(args, 'tag_id') else None
+        )
 
 
 if __name__ == '__main__':

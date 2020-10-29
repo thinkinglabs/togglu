@@ -11,6 +11,7 @@ from .helpers.http import WorkspacesRequestHandler, DetailedReportPaginationRequ
 from .context import togglu
 from togglu import togglu
 
+
 class TestTogglU(unittest.TestCase):
 
     def test_workspaces(self):
@@ -32,7 +33,7 @@ class TestTogglU(unittest.TestCase):
 
     def test_timesheet(self):
         mock_server_port = mock_http_server(DetailedReportPaginationRequestHandler)
-        
+
         stub_url = f'http://localhost:{mock_server_port}'
 
         self.maxDiff = None
@@ -45,7 +46,7 @@ class TestTogglU(unittest.TestCase):
 
             cli = togglu.CLI(['--reports-url', stub_url, 'timesheet', '--workspace-id', '123'])
             cli.execute()
-            
+
             expected_output = \
                 '06.12.2018 | Kaloo                          |       1.90\n' \
                 '05.12.2018 | VooFix                         |       8.14\n' \
@@ -58,6 +59,7 @@ class TestTogglU(unittest.TestCase):
         finally:
             sys.stdout = sys.__stdout__
             locale.setlocale(locale.LC_TIME, default_time_locale)
+
 
 if __name__ == '__main__':
     unittest.main()

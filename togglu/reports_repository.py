@@ -7,14 +7,17 @@ import sys
 from togglu.constants import REPORTS_URL
 from togglu.timesheet import TimeEntries, TimeEntry
 
+
 class ReportsRepository:
 
-    def __init__(self, base_url = REPORTS_URL, config = None):
+    def __init__(self, base_url=REPORTS_URL, config=None):
         self.base_url = base_url
         self.config = config
 
-    def detailed_report(self, workspace_id, since = None, until = None, client_id = None, tag_id = None):
-        params = {"workspace_id": workspace_id, "since": since, "until": until, "client_ids": client_id, "tag_ids": tag_id }
+    def detailed_report(self, workspace_id, since=None, until=None, client_id=None, tag_id=None):
+        params = {
+            "workspace_id": workspace_id, "since": since, "until": until, "client_ids": client_id, "tag_ids": tag_id
+        }
 
         time_entries = TimeEntries()
 
@@ -33,8 +36,8 @@ class ReportsRepository:
 
         return time_entries
 
-
-    def _reports(self, base_url, request_uri, method, params=None, data=None, headers={'content-type': 'application/json'}):
+    def _reports(self, base_url, request_uri, method, params=None, data=None,
+                 headers={'content-type': 'application/json'}):
         """
         Makes an HTTP request to toggl.com. Returns the raw text data received.
         """
@@ -54,6 +57,7 @@ class ReportsRepository:
             print(e)
             print(response.text)
             sys.exit(1)
+
 
 def to_time_entry(detailed_report_entry):
     return TimeEntry(detailed_report_entry['client'], detailed_report_entry['start'], detailed_report_entry['dur'])

@@ -1,11 +1,11 @@
 
 import unittest
 import io
-import locale
 import sys
 
 from .context import togglu
 from togglu import togglu
+
 
 class TestCLI(unittest.TestCase):
 
@@ -42,7 +42,7 @@ class TestCLI(unittest.TestCase):
                 ' [--until UNTIL] [--client-id CLIENT_ID]' \
                 ' [--tag-id TAG_ID]\n' \
                 'togglu.py timesheet: error: the following arguments are required: --workspace-id\n'
-                
+
             self.assertEqual(actual_output.getvalue(), expected_output)
 
         finally:

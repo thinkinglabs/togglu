@@ -1,26 +1,14 @@
 #!/usr/bin/env python3
 
 import unittest
-from unittest.mock import patch
 
-from http.server import BaseHTTPRequestHandler
-from urllib.parse import urlparse, parse_qs
 from .helpers.http import mock_http_server
 from .helpers.http import DetailedReportPaginationRequestHandler, DetailedReportFilterRequestHandler
 
-import os
-from datetime import date
-
-from .context import togglu
-
+from .context import togglu  # noqa: F401
 from togglu.reports_repository import ReportsRepository
+from togglu.timesheet import TimeEntries, TimeEntry
 
-from togglu.list_timesheet import TimesheetQuery
-from togglu.timesheet import Timesheet, TimesheetDateEntry, TimesheetClientEntry, TimeEntries, TimeEntry
-from togglu.timesheet_response import TimesheetResponse, TimesheetDateEntryResponse, TimesheetClientEntryResponse
-
-from togglu.timesheet_service import TimesheetService
-from togglu.list_timesheet import ListTimesheet
 
 class ReportsRepositoryTestCase(unittest.TestCase):
 
@@ -41,23 +29,25 @@ class ReportsRepositoryTestCase(unittest.TestCase):
             TimeEntry("VooFix", "2018-11-23T08:56:20+01:00", 13360000),
             TimeEntry("Wikimba", "2018-11-11T21:02:16+01:00", 391000),
             TimeEntry("Kwimbee", "2018-11-11T20:58:23+01:00", 171000)
-            ])
+        ])
         self.assertEqual(time_entries, expected)
-    
+
     def test_detailed_report_filter(self):
         mock_server_port = mock_http_server(DetailedReportFilterRequestHandler)
-        
+
         stub_url = f'http://localhost:{mock_server_port}'
 
         sut = ReportsRepository(stub_url)
-        time_entries = sut.detailed_report('123', since='2018-11-23', until='2018-11-23', client_id='456', tag_id='123456789')
+        time_entries = sut.detailed_report(
+            '123', since='2018-11-23', until='2018-11-23', client_id='456', tag_id='123456789')
 
         expected = TimeEntries([
             TimeEntry("VooFix", "2018-11-23T20:00:18+01:00", 3821000),
             TimeEntry("VooFix", "2018-11-23T13:53:15+01:00", 13576000),
             TimeEntry("VooFix", "2018-11-23T08:56:20+01:00", 13360000)
-            ])
+        ])
         self.assertEqual(time_entries, expected)
+
 
 if __name__ == '__main__':
     unittest.main()
