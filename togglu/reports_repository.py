@@ -25,7 +25,7 @@ class ReportsRepository:
         page = 1
         while 1 <= page <= number_of_pages:
             params['page'] = page
-            detailed_report = self._reports(self.base_url, "details", "get", params)
+            detailed_report = self._reports(self.base_url, 'details', 'GET', params)
 
             number_of_pages = math.ceil(detailed_report['total_count'] / detailed_report['per_page'])
 
@@ -36,23 +36,23 @@ class ReportsRepository:
 
         return time_entries
 
-    def _reports(self, base_url, request_uri, method, params=None, data=None,
+    def _reports(self, base_url, request_uri, method, params={}, data=None,
                  headers={'content-type': 'application/json'}):
         """
-        Makes an HTTP request to toggl.com. Returns the raw text data received.
+        Makes an HTTP request to the Reports API of toggl.com. Returns a dictionary.
         """
         url = "{}/{}".format(base_url, request_uri)
         params["user_agent"] = "togglu"
         auth = self.config.get_auth() if self.config else None
         try:
-            if method == 'get':
+            if method == 'GET':
                 response = requests.get(url, auth=auth, params=params, data=data, headers=headers)
             else:
                 raise NotImplementedError('HTTP method "{}" not implemented.'.format(method))
             response.raise_for_status()  # raise exception on error
             result = json.loads(response.text)
             return result
-        except Exception as e:
+        except requests.RequestsException as e:
             print('Sent: {}'.format(data))
             print(e)
             print(response.text)
