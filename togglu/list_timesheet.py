@@ -13,12 +13,12 @@ class TimesheetQuery:
 
 class ListTimesheet:
 
-    def __init__(self, detailed_report_service):
-        self.detailed_report_service = detailed_report_service
+    def __init__(self, timesheet_service):
+        self.timesheet_service = timesheet_service
 
     def execute(self, query):
 
-        timesheet = self.detailed_report_service.timesheet(
+        timesheet = self.timesheet_service.timesheet(
             query.workspace_id, query.since, query.until, query.client_id, query.tag_id
         )
 
