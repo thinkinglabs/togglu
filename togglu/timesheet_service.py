@@ -4,11 +4,11 @@ from togglu.timesheet import Timesheet
 
 class TimesheetService:
 
-    def __init__(self, detailed_report_repository):
-        self.detailed_report_repository = detailed_report_repository
+    def __init__(self, report_repository):
+        self.report_repository = report_repository
 
     def timesheet(self, workspace_id, since=None, until=None, client_id=None, tag_id=None):
-        time_entries = self.detailed_report_repository.detailed_report(workspace_id, since, until, client_id, tag_id)
+        time_entries = self.report_repository.detailed_report(workspace_id, since, until, client_id, tag_id)
 
         timesheet = Timesheet()
 
