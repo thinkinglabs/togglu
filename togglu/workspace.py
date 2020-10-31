@@ -6,5 +6,9 @@ class Workspace:
         self.name = name
 
     def __eq__(self, other):
-        return self.id == other.id and \
+        return other.__class__.__name__ == 'Workspace' and \
+            self.id == other.id and \
             self.name == other.name
+
+    def __repr__(self):
+        return f"Workspace(id={self.id}, name={self.name})"
