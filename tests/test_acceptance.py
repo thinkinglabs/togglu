@@ -26,7 +26,7 @@ class TestTogglU(unittest.TestCase):
             cli = togglu.CLI(['--toggl-url', stub_url, 'workspaces'])
             cli.execute()
 
-            expected_output = "1234567:workspace 1\n2345678:workspace 2\n3456789:workspace 3\n\n"
+            expected_output = "1234567:workspace 1\n2345678:workspace 2\n3456789:workspace 3\n"
             self.assertEqual(actual_output.getvalue(), expected_output)
         finally:
             sys.stdout = sys.__stdout__

@@ -6,11 +6,11 @@ import sys
 import io
 
 from .context import togglu  # noqa: F401
-from togglu.workspaces_console_renderer import WorkspaceConsoleRenderer
+from togglu.workspaces_console_renderer import WorkspacesConsoleRenderer
 from togglu.workspace import Workspace
 
 
-class WorkspaceConsoleRendererTestCase(unittest.TestCase):
+class WorkspacesConsoleRendererTestCase(unittest.TestCase):
 
     @patch('togglu.toggl_repository.TogglRepository')
     def test_render(self, toggl_repository):
@@ -19,7 +19,7 @@ class WorkspaceConsoleRendererTestCase(unittest.TestCase):
             Workspace('753', 'another workspace')
         ]
 
-        sut = WorkspaceConsoleRenderer(toggl_repository)
+        sut = WorkspacesConsoleRenderer(toggl_repository)
 
         try:
             actual_output = io.StringIO()

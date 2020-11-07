@@ -5,14 +5,15 @@ import os
 import argparse
 
 import requests
-import json
 import configparser as ConfigParser
 
 from togglu.constants import TOGGL_URL, REPORTS_URL
 from togglu.timesheet_console_renderer import TimesheetConsoleRenderer
+from togglu.workspaces_console_renderer import WorkspacesConsoleRenderer
 from togglu.list_timesheet import ListTimesheet
 from togglu.timesheet_service import TimesheetService
 from togglu.reports_repository import ReportsRepository
+from togglu.toggl_repository import TogglRepository
 
 
 class Config(object):
@@ -59,37 +60,6 @@ class Config(object):
         return requests.auth.HTTPBasicAuth(self.get('auth', 'api_token'), 'api_token')
 
 
-class Workspaces:
-
-    def __init__(self, toggl_url=TOGGL_URL):
-        self.workspaces = toggl(toggl_url, "/workspaces", "get")
-
-    def __str__(self):
-        result = ""
-        for workspace in self.workspaces:
-            result += "{}:{}\n".format(workspace['id'], workspace['name'])
-        return result
-
-
-def toggl(base_url, request_uri, method, params=None, data=None, headers={'content-type': 'application/json'}):
-    """
-    Makes an HTTP request to toggl.com. Returns the raw text data received.
-    """
-    url = "{}{}".format(base_url, request_uri)
-    try:
-        if method == 'get':
-            r = requests.get(url, auth=Config().get_auth(), params=params, data=data, headers=headers)
-        else:
-            raise NotImplementedError('HTTP method "{}" not implemented.'.format(method))
-        r.raise_for_status()  # raise exception on error
-        return json.loads(r.text)
-    except Exception as e:
-        print('Sent: {}'.format(data))
-        print(e)
-        print(r.text)
-        sys.exit(1)
-
-
 class CLI():
 
     def __init__(self, args=[]):
@@ -113,8 +83,10 @@ class CLI():
         args.func(args)
 
     def workspaces(self, args):
-        workspaces = Workspaces(args.toggl_url)
-        print(workspaces)
+        renderer = WorkspacesConsoleRenderer(
+            TogglRepository(args.toggl_url, Config())
+        )
+        renderer.render()
 
     def timesheet(self, args):
         renderer = TimesheetConsoleRenderer(

@@ -1,5 +1,5 @@
 
-class WorkspaceConsoleRenderer():
+class WorkspacesConsoleRenderer():
 
     def __init__(self, toggl_repository):
         self.toggl_repository = toggl_repository
