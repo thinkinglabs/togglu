@@ -1,4 +1,4 @@
-# Togglu
+# Togglu [![Build Status](https://travis-ci.com/thinkinglabs/togglu.svg?branch=master)](https://travis-ci.com/thinkinglabs/togglu)
 
 A command-line interface for toggl.com
 
