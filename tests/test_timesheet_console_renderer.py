@@ -8,6 +8,7 @@ import io
 import locale
 from datetime import date
 
+from .context import togglu  # noqa: F401
 from togglu.timesheet_console_renderer import TimesheetConsoleRenderer
 from togglu.timesheet_response import TimesheetResponse, TimesheetDateEntryResponse, TimesheetClientEntryResponse
 
