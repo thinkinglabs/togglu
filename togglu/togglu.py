@@ -1,6 +1,4 @@
-#!/usr/bin/env python3
 
-import sys
 import argparse
 
 from togglu.config import Config
@@ -17,7 +15,7 @@ class CLI():
 
     def __init__(self, args=[]):
         self.arguments = args
-        self.parser = argparse.ArgumentParser(prog='togglu.py', description='Toggl commandline tool')
+        self.parser = argparse.ArgumentParser(prog='togglu', description='Toggl commandline tool')
         self.parser.add_argument('--toggl-url', default=TOGGL_URL)
         self.parser.add_argument('--reports-url', default=REPORTS_URL)
         subparsers = self.parser.add_subparsers(title='available subcommands', dest='subcommand', required=True)
@@ -56,8 +54,3 @@ class CLI():
             args.client_id if hasattr(args, 'client_id') else None,
             args.tag_id if hasattr(args, 'tag_id') else None
         )
-
-
-if __name__ == '__main__':
-    cli = CLI(sys.argv[1:])
-    cli.execute()
