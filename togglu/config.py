@@ -10,8 +10,7 @@ class Config(object):
     """
     toggl configuration data, read from ~/.togglrc.
     Properties:
-        auth - api_token.
-        options - (timezone, time_format, continue_creates) tuple
+        auth - api_token
     """
 
     def __init__(self):
@@ -30,10 +29,6 @@ class Config(object):
         cfg = ConfigParser.RawConfigParser()
         cfg.add_section('auth')
         cfg.set('auth', 'api_token', 'your_api_token')
-        cfg.add_section('options')
-        cfg.set('options', 'timezone', 'UTC')
-        cfg.set('options', 'time_format', '%I:%M%p')
-        cfg.set('options', 'continue_creates', 'true')
         with open(os.path.expanduser('~/.togglrc'), 'w') as cfgfile:
             cfg.write(cfgfile)
         os.chmod(os.path.expanduser('~/.togglrc'), 0o600)
