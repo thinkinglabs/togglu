@@ -21,7 +21,7 @@ class TestTimesheetConsoleRendererTest(unittest.TestCase):
         default_time_locale = locale.getlocale(locale.LC_TIME)[0]
 
         try:
-            locale.setlocale(locale.LC_TIME, 'fr_BE')
+            locale.setlocale(locale.LC_TIME, 'fr_BE.UTF-8')
             actual_output = io.StringIO()
             sys.stdout = actual_output
 
