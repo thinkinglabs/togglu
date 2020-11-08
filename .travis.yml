@@ -1,4 +1,8 @@
 language: python
+addons:
+  apt:
+    packages:
+      - language-pack-fr
 python:
   - "3.8"
 script: make test
