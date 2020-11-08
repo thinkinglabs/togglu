@@ -5,20 +5,24 @@ import os
 import requests
 import configparser as ConfigParser
 
+CFG_FILE = '~/.togglrc'
 
-class Config(object):
+
+class Config():
     """
     toggl configuration data, read from ~/.togglrc.
     Properties:
         auth - api_token
     """
 
-    def __init__(self):
+    # TODO: don't read and write in constructor
+    def __init__(self, cfg_file=CFG_FILE):
         """
         Reads configuration data from ~/.togglrc.
         """
+        self.cfg_file = cfg_file
         self.cfg = ConfigParser.RawConfigParser({'continue_creates': 'false'})
-        if self.cfg.read(os.path.expanduser('~/.togglrc')) == []:
+        if self.cfg.read(os.path.expanduser(self.cfg_file)) == []:
             self._create_empty_config()
             raise IOError("Missing ~/.togglrc. A default has been created for editing.")
 
@@ -29,9 +33,9 @@ class Config(object):
         cfg = ConfigParser.RawConfigParser()
         cfg.add_section('auth')
         cfg.set('auth', 'api_token', 'your_api_token')
-        with open(os.path.expanduser('~/.togglrc'), 'w') as cfgfile:
+        with open(os.path.expanduser(self.cfg_file), 'w') as cfgfile:
             cfg.write(cfgfile)
-        os.chmod(os.path.expanduser('~/.togglrc'), 0o600)
+        os.chmod(os.path.expanduser(self.cfg_file), 0o600)
 
     def get(self, section, key):
         """

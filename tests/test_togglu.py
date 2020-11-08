@@ -19,7 +19,7 @@ class TestCLI(unittest.TestCase):
 
         except SystemExit:
             expected_output = \
-                'usage: togglu [-h] [--toggl-url TOGGL_URL] [--reports-url REPORTS_URL]' \
+                'usage: togglu [-h] [--config CONFIG] [--toggl-url TOGGL_URL] [--reports-url REPORTS_URL]' \
                 ' {workspaces,timesheet} ...\n' \
                 'togglu: error: the following arguments are required: subcommand\n'
 

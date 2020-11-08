@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 
 import unittest
+import os
 import io
 import locale
 import sys
+import configparser as ConfigParser
 
 from .helpers.http import mock_http_server
 from .helpers.http import WorkspacesRequestHandler, DetailedReportPaginationRequestHandler
@@ -14,6 +16,19 @@ from togglu import togglu
 
 class TestTogglU(unittest.TestCase):
 
+    cfg_file = '/tmp/togglrc'
+
+    def setUp(self):
+        # TODO: replace by Config.create_empty_config()
+        cfg = ConfigParser.RawConfigParser()
+        cfg.add_section('auth')
+        cfg.set('auth', 'api_token', 'your_api_token')
+        with open(os.path.expanduser(self.cfg_file), 'w') as cfgfile:
+            cfg.write(cfgfile)
+
+    def tearDown(self):
+        os.remove(os.path.expanduser(self.cfg_file))
+
     def test_workspaces(self):
         mock_server_port = mock_http_server(WorkspacesRequestHandler)
 
@@ -23,7 +38,7 @@ class TestTogglU(unittest.TestCase):
             actual_output = io.StringIO()
             sys.stdout = actual_output
 
-            cli = togglu.CLI(['--toggl-url', stub_url, 'workspaces'])
+            cli = togglu.CLI(['--config', self.cfg_file, '--toggl-url', stub_url, 'workspaces'])
             cli.execute()
 
             expected_output = "1234567:workspace 1\n2345678:workspace 2\n3456789:workspace 3\n"
@@ -44,7 +59,8 @@ class TestTogglU(unittest.TestCase):
             actual_output = io.StringIO()
             sys.stdout = actual_output
 
-            cli = togglu.CLI(['--reports-url', stub_url, 'timesheet', '--workspace-id', '123'])
+            cli = togglu.CLI(
+                ['--config', self.cfg_file, '--reports-url', stub_url, 'timesheet', '--workspace-id', '123'])
             cli.execute()
 
             expected_output = \

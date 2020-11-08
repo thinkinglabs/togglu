@@ -1,7 +1,7 @@
 
 import argparse
 
-from togglu.config import Config
+from togglu.config import Config, CFG_FILE
 from togglu.constants import TOGGL_URL, REPORTS_URL
 from togglu.timesheet_console_renderer import TimesheetConsoleRenderer
 from togglu.workspaces_console_renderer import WorkspacesConsoleRenderer
@@ -16,6 +16,7 @@ class CLI():
     def __init__(self, args=[]):
         self.arguments = args
         self.parser = argparse.ArgumentParser(prog='togglu', description='Toggl commandline tool')
+        self.parser.add_argument('--config', default=CFG_FILE)
         self.parser.add_argument('--toggl-url', default=TOGGL_URL)
         self.parser.add_argument('--reports-url', default=REPORTS_URL)
         subparsers = self.parser.add_subparsers(title='available subcommands', dest='subcommand', required=True)
@@ -35,7 +36,7 @@ class CLI():
 
     def workspaces(self, args):
         renderer = WorkspacesConsoleRenderer(
-            TogglRepository(args.toggl_url, Config())
+            TogglRepository(args.toggl_url, Config(args.config))
         )
         renderer.render()
 
@@ -43,7 +44,7 @@ class CLI():
         renderer = TimesheetConsoleRenderer(
             ListTimesheet(
                 TimesheetService(
-                    ReportsRepository(args.reports_url, Config())
+                    ReportsRepository(args.reports_url, Config(args.config))
                 )
             )
         )
