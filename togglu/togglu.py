@@ -15,20 +15,24 @@ class CLI():
 
     def __init__(self, args=[]):
         self.arguments = args
-        self.parser = argparse.ArgumentParser(prog='togglu', description='Toggl commandline tool')
+        self.parser = argparse.ArgumentParser(prog='togglu', description='Toggl commandline tool',
+                                              formatter_class=self.formatter)
         self.parser.add_argument('--config', default=CFG_FILE)
         self.parser.add_argument('--toggl-url', default=TOGGL_URL)
         self.parser.add_argument('--reports-url', default=REPORTS_URL)
         subparsers = self.parser.add_subparsers(title='available subcommands', dest='subcommand', required=True)
         parser_workspaces = subparsers.add_parser('workspaces')
         parser_workspaces.set_defaults(func=self.workspaces)
-        parser_timesheet = subparsers.add_parser('timesheet')
+        parser_timesheet = subparsers.add_parser('timesheet', formatter_class=self.formatter)
         parser_timesheet.set_defaults(func=self.timesheet)
         parser_timesheet.add_argument('--workspace-id', required=True)
         parser_timesheet.add_argument('--since')
         parser_timesheet.add_argument('--until')
         parser_timesheet.add_argument('--client-id')
         parser_timesheet.add_argument('--tag-id')
+
+    def formatter(self, prog):
+        return argparse.HelpFormatter(prog, width=80)
 
     def execute(self):
         args = self.parser.parse_args(self.arguments)
