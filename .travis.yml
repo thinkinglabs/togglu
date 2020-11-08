@@ -1,4 +1,5 @@
 language: python
 python:
   - "3.8"
+before_script: locale -a
 script: make test
