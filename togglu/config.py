@@ -21,6 +21,7 @@ class Config():
         Reads configuration data from ~/.togglrc.
         """
         self.cfg_file = cfg_file
+        # TODO: use ConfigParser instead of RawConfigParser
         self.cfg = ConfigParser.RawConfigParser({'continue_creates': 'false'})
         if self.cfg.read(os.path.expanduser(self.cfg_file)) == []:
             self._create_empty_config()
