@@ -18,10 +18,11 @@ class TestTimesheetConsoleRendererTest(unittest.TestCase):
     @patch('togglu.list_timesheet.ListTimesheet')
     def test_render(self, list_timesheet):
 
-        default_time_locale = locale.getlocale(locale.LC_TIME)[0]
+        default_locale = locale.getdefaultlocale()
 
         try:
-            locale.setlocale(locale.LC_TIME, 'fr_BE.UTF-8')
+            # TODO move to setUp
+            locale.setlocale(locale.LC_TIME, 'en_US.UTF-8')
             actual_output = io.StringIO()
             sys.stdout = actual_output
 
@@ -41,15 +42,16 @@ class TestTimesheetConsoleRendererTest(unittest.TestCase):
             sut.render(1234)
 
             expected_output = \
-                '27.12.2018 | enicious                       |       2.50\n' \
-                '27.12.2018 | frontile                       |       4.00\n' \
-                '28.12.2018 | enicious                       |       1.00\n' \
+                '12/27/2018 | enicious                       |       2.50\n' \
+                '12/27/2018 | frontile                       |       4.00\n' \
+                '12/28/2018 | enicious                       |       1.00\n' \
                 'total hours: 7.50\n' \
                 'days worked: 2.00\n'
 
             self.assertEqual(actual_output.getvalue(), expected_output)
 
         finally:
+            # TODO move to tearDown
             sys.stdout = sys.__stdout__
 
-            locale.setlocale(locale.LC_TIME, default_time_locale)
+            locale.setlocale(locale.LC_TIME, default_locale)

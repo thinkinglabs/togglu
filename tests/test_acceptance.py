@@ -52,10 +52,10 @@ class TestTogglU(unittest.TestCase):
         stub_url = f'http://localhost:{mock_server_port}'
 
         self.maxDiff = None
-        default_time_locale = locale.getlocale(locale.LC_TIME)[0]
+        default_locale = locale.getdefaultlocale()
 
         try:
-            locale.setlocale(locale.LC_TIME, 'fr_BE.UTF-8')
+            locale.setlocale(locale.LC_TIME, 'en_US.UTF-8')
             actual_output = io.StringIO()
             sys.stdout = actual_output
 
@@ -64,17 +64,17 @@ class TestTogglU(unittest.TestCase):
             cli.execute()
 
             expected_output = \
-                '06.12.2018 | Kaloo                          |       1.90\n' \
-                '05.12.2018 | VooFix                         |       8.14\n' \
-                '23.11.2018 | VooFix                         |       8.54\n' \
-                '11.11.2018 | Wikimba                        |       0.11\n' \
-                '11.11.2018 | Kwimbee                        |       0.05\n' \
+                '12/06/2018 | Kaloo                          |       1.90\n' \
+                '12/05/2018 | VooFix                         |       8.14\n' \
+                '11/23/2018 | VooFix                         |       8.54\n' \
+                '11/11/2018 | Wikimba                        |       0.11\n' \
+                '11/11/2018 | Kwimbee                        |       0.05\n' \
                 'total hours: 18.74\n' \
                 'days worked: 4.00\n'
             self.assertEqual(actual_output.getvalue(), expected_output)
         finally:
             sys.stdout = sys.__stdout__
-            locale.setlocale(locale.LC_TIME, default_time_locale)
+            locale.setlocale(locale.LC_TIME, default_locale)
 
 
 if __name__ == '__main__':
