@@ -3,6 +3,7 @@ import unittest
 
 from .helpers.http import mock_http_server
 from .helpers.http import WorkspacesRequestHandler
+from .helpers.http import HttpGoneRequestHandler
 
 from .context import togglu  # noqa: F401
 from togglu.toggl_repository import TogglRepository
@@ -24,3 +25,12 @@ class TogglRepositoryTestCase(unittest.TestCase):
             Workspace(3456789, 'workspace 3')
         ]
         self.assertEqual(actual, expected)
+
+    def test_410_gone(self):
+        mock_server_port = mock_http_server(HttpGoneRequestHandler)
+
+        stub_url = f'http://localhost:{mock_server_port}'
+
+        sut = TogglRepository(stub_url)
+        with self.assertRaises(Exception):
+            sut.workspaces()

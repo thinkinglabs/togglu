@@ -1,7 +1,7 @@
 
-import sys
-import requests
 import json
+
+import requests
 
 from togglu.constants import TOGGL_URL
 from togglu.workspace import Workspace
@@ -39,8 +39,7 @@ class TogglRepository:
             response.raise_for_status()  # raise exception on error
             result = json.loads(response.text)
             return result
-        except requests.RequestException as e:
+        except requests.exceptions.RequestException as e:
             print('Sent: {}'.format(data))
             print(e)
             print(response.text)
-            sys.exit(1)
