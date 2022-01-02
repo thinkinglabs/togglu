@@ -3,7 +3,9 @@
 import unittest
 
 from .helpers.http import mock_http_server
-from .helpers.http import DetailedReportPaginationRequestHandler, DetailedReportFilterRequestHandler
+from .helpers.http import DetailedReportPaginationRequestHandler
+from .helpers.http import DetailedReportFilterRequestHandler
+from .helpers.http import HttpGoneRequestHandler
 
 from .context import togglu  # noqa: F401
 from togglu.reports_repository import ReportsRepository
@@ -48,6 +50,17 @@ class ReportsRepositoryTestCase(unittest.TestCase):
         ])
         self.assertEqual(time_entries, expected)
 
+    def test_410_gone(self):
+        mock_server_port = mock_http_server(HttpGoneRequestHandler)
 
-if __name__ == '__main__':
-    unittest.main()
+        stub_url = f'http://localhost:{mock_server_port}'
+
+        sut = ReportsRepository(stub_url)
+        with self.assertRaises(Exception):
+            sut.detailed_report(
+                '123',
+                since='2018-11-23',
+                until='2018-11-23',
+                client_id='456',
+                tag_id='123456789'
+            )

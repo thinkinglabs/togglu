@@ -113,3 +113,13 @@ class DetailedReportFilterRequestHandler(BaseHTTPRequestHandler):
                 self.wfile.write(bytes(data, "utf-8"))
 
         return
+
+
+class HttpGoneRequestHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+
+        self.send_response(code=410, message="GONE")
+        self.send_header('Content-Type', 'text/plain')
+        self.end_headers()
+        self.wfile.write(bytes("410 Gone", "utf-8"))
+        return

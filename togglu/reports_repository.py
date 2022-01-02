@@ -1,8 +1,8 @@
 
-import requests
-import json
 import math
-import sys
+import json
+
+import requests
 
 from togglu.constants import REPORTS_URL
 from togglu.timesheet import TimeEntries, TimeEntry
@@ -52,11 +52,11 @@ class ReportsRepository:
             response.raise_for_status()  # raise exception on error
             result = json.loads(response.text)
             return result
-        except requests.RequestsException as e:
+        except requests.exceptions.RequestException as e:
             print('Sent: {}'.format(data))
             print(e)
             print(response.text)
-            sys.exit(1)
+            raise Exception from e
 
 
 def to_time_entry(detailed_report_entry):
