@@ -23,7 +23,7 @@ class TogglRepository:
 
         return workspaces
 
-    def _toggl(self, base_url, request_uri, method, params={}, data=None,
+    def _toggl(self, base_url, request_uri, method, params={},
                headers={'content-type': 'application/json'}):
         """
         Makes an HTTP request to the Toggle API of toggl.com. Returns a dictionary.
@@ -33,13 +33,12 @@ class TogglRepository:
         auth = self.config.get_auth() if self.config else None
         try:
             if method == 'GET':
-                response = requests.get(url, auth=auth, params=params, data=data, headers=headers)
+                response = requests.get(url, auth=auth, params=params, headers=headers)
             else:
                 raise NotImplementedError('HTTP method "{}" not implemented.'.format(method))
             response.raise_for_status()  # raise exception on error
             result = json.loads(response.text)
             return result
         except requests.exceptions.RequestException as e:
-            print('Sent: {}'.format(data))
             print(e)
             print(response.text)
